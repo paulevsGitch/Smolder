@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "smolder",
+  "version": "${version}",
+  "name": "Smolder",
+  "description": "Makes Nether Generation more mod compatible.",
+  "authors": [
+    "TerraformersMC"
+  ],
+  "license": "CC0-1.0",
+  "icon": "assets/Smolder/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.terraformers.smolder.Smolder"
+    ]
+  },
+  "mixins": [
+    "Smolder.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.8.8+build.202",
+    "minecraft": ">=1.16-"
+  }
+}
