@@ -34,6 +34,7 @@ public final class SmolderBiomeRegistry
 	public static final SmolderBiome CRIMSON_FOREST_BIOME = registerBiome(Biomes.CRIMSON_FOREST);
 	public static final SmolderBiome WARPED_FOREST_BIOME = registerBiome(Biomes.WARPED_FOREST);
 	public static final SmolderBiome SOUL_SAND_VALLEY_BIOME = registerBiome(Biomes.SOUL_SAND_VALLEY);
+	public static final SmolderBiome BASALT_DELTAS_BIOME = registerBiome(Biomes.BASALT_DELTAS);
 	
 	/**
 	 * Used to put non-smolder biomes to registry. Puts them into wrappers with default values;
@@ -183,5 +184,13 @@ public final class SmolderBiomeRegistry
 	{
 		SmolderBiome parent;
 		return compare == source || (((parent = getParent(compare)) != null) && parent == source);
+	}
+	
+	public static void registerExistingBiomes()
+	{
+		Registry.BIOME.forEach((biome) -> {
+			if (!(biome instanceof SmolderBiome))
+				registerBiome(biome);
+		});
 	}
 }
