@@ -14,6 +14,7 @@ import com.terraformers.smolder.biome.SmolderWrappedBiome;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.biome.Biomes;
 
 public final class SmolderBiomeRegistry
@@ -153,8 +154,10 @@ public final class SmolderBiomeRegistry
 	{
 		float w = random.nextFloat() * WEIGHTS[section];
 		for (SmolderBiome biome: BIOMES.get(section))
-			if (biome.getWeight(section) <= w)
+		{
+			if (w < biome.getWeight(section))
 				return biome;
+		}
 		return NETHER_WASTES_BIOME;
 	}
 	
@@ -189,7 +192,7 @@ public final class SmolderBiomeRegistry
 	public static void registerExistingBiomes()
 	{
 		Registry.BIOME.forEach((biome) -> {
-			if (!(biome instanceof SmolderBiome))
+			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome))
 				registerBiome(biome);
 		});
 	}

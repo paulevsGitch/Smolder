@@ -9,11 +9,14 @@ import net.minecraft.world.biome.Biome;
 
 public class SmolderBiome extends Biome
 {
+	private static int globalID = 0;
+	
 	private final String registryName;
 	private final float size;
 	private final int minHeight;
 	private final int maxHeight;
 	private final float[] weights;
+	private final int id;
 	
 	private float subBiomeWeight = 1;
 	
@@ -25,6 +28,7 @@ public class SmolderBiome extends Biome
 		String name = registryName.substring(registryName.indexOf(':') + 1);
 		String group = "biomes." + namespace + "." + name;
 		
+		this.id = globalID++;
 		this.registryName = registryName;
 		this.size = Config.getFloat(group, "size", settings.getSize());
 		this.minHeight = clamp(Config.getInt(group, "minHeight", settings.getMinHeight()) >> 2, 0, 63);
@@ -92,5 +96,17 @@ public class SmolderBiome extends Biome
 		int index = section - minHeight;
 		weights[index] += weight;
 		return weights[index];
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return id;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return registryName;
 	}
 }
