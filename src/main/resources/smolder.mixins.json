@@ -1,14 +1,14 @@
 {
-  "required": true,
-  "package": "com.terraformers.smolder.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "MixinDimensionType",
-    "MixinServerWorld"
-  ],
-  "client": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "com.terraformers.smolder.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"MixinDimensionType",
+		"MixinServerWorld"
+	],
+	"client": [
+	],
+	"injectors": {
+	"defaultRequire": 1
+	}
 }

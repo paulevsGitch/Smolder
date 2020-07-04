@@ -18,11 +18,17 @@ import net.minecraft.world.biome.Biomes;
 
 public final class SmolderBiomeRegistry
 {
-	private static final List<List<SmolderBiome>> BIOMES = new ArrayList<List<SmolderBiome>>();
+	private static final Map<Integer, List<SmolderBiome>> BIOMES = Maps.newHashMap();
 	private static final Map<SmolderBiome, SmolderBiome> EDGES = Maps.newHashMap();
 	private static final Map<SmolderBiome, List<SmolderBiome>> SUBBIOMES = Maps.newHashMap();
 	private static final Map<SmolderBiome, SmolderBiome> PARENTS = Maps.newHashMap();
 	private static final float[] WEIGHTS = new float[64]; // 64 is 256/4 - maximum biome rows in world
+	
+	static
+	{
+		for (int i = 0; i < 64; i++)
+			BIOMES.put(i, new ArrayList<SmolderBiome>());
+	}
 	
 	public static final SmolderBiome NETHER_WASTES_BIOME = registerBiome(Biomes.NETHER_WASTES);
 	public static final SmolderBiome CRIMSON_FOREST_BIOME = registerBiome(Biomes.CRIMSON_FOREST);
@@ -91,7 +97,7 @@ public final class SmolderBiomeRegistry
 	public static List<Biome> getBiomes()
 	{
 		List<SmolderBiome> biomes = new ArrayList<SmolderBiome>();
-		BIOMES.forEach((list) -> {
+		BIOMES.forEach((section, list) -> {
 			list.forEach((biome -> {
 				if (!biomes.contains(biome))
 					biomes.add(biome);
@@ -122,7 +128,8 @@ public final class SmolderBiomeRegistry
 	
 	private static void register(SmolderBiome biome)
 	{
-		Registry.register(Registry.BIOME, new Identifier(Smolder.MOD_ID, biome.getRegistryName()), biome);
+		if (!(biome instanceof SmolderWrappedBiome))
+			Registry.register(Registry.BIOME, new Identifier(Smolder.MOD_ID, biome.getRegistryName()), biome);
 	}
 	
 	/**
@@ -174,11 +181,5 @@ public final class SmolderBiomeRegistry
 	{
 		SmolderBiome parent;
 		return compare == source || (((parent = getParent(compare)) != null) && parent == source);
-	}
-	
-	static
-	{
-		for (int i = 0; i < 64; i++)
-			BIOMES.add(new ArrayList<SmolderBiome>());
 	}
 }
