@@ -1,6 +1,5 @@
 package com.terraformers.smolder.biome;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import com.terraformers.smolder.config.Config;
@@ -15,6 +14,7 @@ public class SmolderBiome extends Biome
 	private final float size;
 	private final int minHeight;
 	private final int maxHeight;
+	private final float weight;
 	private final float[] weights;
 	private final int id;
 	
@@ -34,9 +34,8 @@ public class SmolderBiome extends Biome
 		this.minHeight = clamp(Config.getInt(group, "minHeight", settings.getMinHeight()) >> 2, 0, 63);
 		this.maxHeight = clamp(Config.getInt(group, "maxHeight", settings.getMaxHeight()) >> 2, 0, 63);
 		
+		this.weight = Config.getFloat(group, "weight", settings.getWeight());
 		this.weights = new float[this.maxHeight - this.minHeight + 1];
-		float weight = Config.getFloat(group, "weight", settings.getWeight());
-		Arrays.fill(this.weights, weight);
 	}
 	
 	private int clamp(int x, int min, int max)
@@ -91,10 +90,10 @@ public class SmolderBiome extends Biome
 		return weights[section - minHeight];
 	}
 	
-	public float mutateWeight(int section, float weight)
+	public float addToLayer(int section, float weight)
 	{
 		int index = section - minHeight;
-		weights[index] += weight;
+		weights[index] = weight + this.weight;
 		return weights[index];
 	}
 	
@@ -108,5 +107,12 @@ public class SmolderBiome extends Biome
 	public String toString()
 	{
 		return registryName;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		SmolderBiome biome = (SmolderBiome) obj;
+		return biome == null ? false : biome.id == id;
 	}
 }

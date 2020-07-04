@@ -1,6 +1,7 @@
 package com.terraformers.smolder.api;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -10,6 +11,7 @@ import com.google.common.collect.Maps;
 import com.terraformers.smolder.Smolder;
 import com.terraformers.smolder.biome.SmolderBiome;
 import com.terraformers.smolder.biome.SmolderWrappedBiome;
+import com.terraformers.smolder.config.Config;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -37,6 +39,8 @@ public final class SmolderBiomeRegistry
 	public static final SmolderBiome SOUL_SAND_VALLEY_BIOME = registerBiome(Biomes.SOUL_SAND_VALLEY);
 	public static final SmolderBiome BASALT_DELTAS_BIOME = registerBiome(Biomes.BASALT_DELTAS);
 	
+	private static final boolean OVERRIDE = Config.getBoolean("generator", "allow_override_existing_biomes", true);
+	
 	/**
 	 * Used to put non-smolder biomes to registry. Puts them into wrappers with default values;
 	 * @param biome - a {@link Biome} to register.
@@ -55,8 +59,10 @@ public final class SmolderBiomeRegistry
 		register(biome);
 		for (int section = biome.getMinHeight(); section <= biome.getMaxHeight(); section++)
 		{
-			BIOMES.get(section).add(biome);
-			WEIGHTS[section] = biome.mutateWeight(section, WEIGHTS[section]);
+			List<SmolderBiome> list = BIOMES.get(section);
+			if (OVERRIDE || !list.contains(biome))
+				list.add(biome);
+			WEIGHTS[section] = biome.addToLayer(section, WEIGHTS[section]);
 		}
 		return biome;
 	}
@@ -69,7 +75,8 @@ public final class SmolderBiomeRegistry
 	public static void addEdgeBiome(SmolderBiome edge, SmolderBiome parent)
 	{
 		register(edge);
-		EDGES.put(parent, edge);
+		if (OVERRIDE || !EDGES.containsKey(parent))
+			EDGES.put(parent, edge);
 		PARENTS.put(edge, parent);
 	}
 	
@@ -87,7 +94,8 @@ public final class SmolderBiomeRegistry
 			subbiomes = new ArrayList<SmolderBiome>();
 			SUBBIOMES.put(parent, subbiomes);
 		}
-		subbiomes.add(subbiome);
+		if (OVERRIDE || !subbiomes.contains(subbiome))
+			subbiomes.add(subbiome);
 		parent.addSubWeight(subbiome.getWeight());
 		PARENTS.put(subbiome, parent);
 	}
@@ -195,5 +203,25 @@ public final class SmolderBiomeRegistry
 			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome))
 				registerBiome(biome);
 		});
+	}
+	
+	/**
+	 * Returns a copy of layer biomes list.
+	 * @param layer - layer index, y/4 [0 - 63].
+	 * @return {@link List} of {@link SmolderBiome}.
+	 */
+	public List<SmolderBiome> getBiomesForLayer(int layer)
+	{
+		List<SmolderBiome> list = BIOMES.get(layer);
+		return list.isEmpty() ? Collections.singletonList(NETHER_WASTES_BIOME) : ImmutableList.copyOf(list);
+	}
+	
+	/**
+	 * Clear all biomes at specified layer. Call this if yoi want to register unique biomes for some layers.
+	 * @param layer - layer index, y/4 [0 - 63].
+	 */
+	public void clearlayer(int layer)
+	{
+		BIOMES.get(layer).clear();
 	}
 }
