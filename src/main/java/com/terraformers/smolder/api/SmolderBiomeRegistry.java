@@ -26,6 +26,7 @@ public final class SmolderBiomeRegistry
 	private static final Map<SmolderBiome, List<SmolderBiome>> SUBBIOMES = Maps.newHashMap();
 	private static final Map<SmolderBiome, SmolderBiome> PARENTS = Maps.newHashMap();
 	private static final float[] WEIGHTS = new float[64]; // 64 is 256/4 - maximum biome rows in world
+	private static final boolean OVERRIDE = Config.getBoolean("generator", "allow_override_existing_biomes", true);
 	
 	static
 	{
@@ -33,13 +34,12 @@ public final class SmolderBiomeRegistry
 			BIOMES.put(i, new ArrayList<SmolderBiome>());
 	}
 	
+	// Constants for Vanilla biomes //
 	public static final SmolderBiome NETHER_WASTES_BIOME = registerBiome(Biomes.NETHER_WASTES);
 	public static final SmolderBiome CRIMSON_FOREST_BIOME = registerBiome(Biomes.CRIMSON_FOREST);
 	public static final SmolderBiome WARPED_FOREST_BIOME = registerBiome(Biomes.WARPED_FOREST);
 	public static final SmolderBiome SOUL_SAND_VALLEY_BIOME = registerBiome(Biomes.SOUL_SAND_VALLEY);
 	public static final SmolderBiome BASALT_DELTAS_BIOME = registerBiome(Biomes.BASALT_DELTAS);
-	
-	private static final boolean OVERRIDE = Config.getBoolean("generator", "allow_override_existing_biomes", true);
 	
 	/**
 	 * Used to put non-smolder biomes to registry. Puts them into wrappers with default values;
@@ -169,6 +169,12 @@ public final class SmolderBiomeRegistry
 		return NETHER_WASTES_BIOME;
 	}
 	
+	/**
+	 * Returns sub-biome for specified {@link SmolderBiome} or itself.
+	 * @param parent - {@link SmolderBiome};
+	 * @param random - {@link Random}.
+	 * @return {@link SmolderBiome} sub-biome or parent param.
+	 */
 	public static SmolderBiome getSubBiome(SmolderBiome parent, Random random)
 	{
 		List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
@@ -191,12 +197,21 @@ public final class SmolderBiomeRegistry
 		return PARENTS.get(biome);
 	}
 	
+	/**
+	 * Check if biome is same (is itself or sub-biome with equal parent)
+	 * @param source - {@link SmolderBiome}, biome itself;
+	 * @param compare - {@link SmolderBiome}, comparating biome.
+	 * @return true if biomes are "equal".
+	 */
 	public static boolean isSameBiome(SmolderBiome source, SmolderBiome compare)
 	{
 		SmolderBiome parent;
 		return compare == source || (((parent = getParent(compare)) != null) && parent == source);
 	}
 	
+	/**
+	 * Register existing biomes on library startup. Must be called once.
+	 */
 	public static void registerExistingBiomes()
 	{
 		Registry.BIOME.forEach((biome) -> {
