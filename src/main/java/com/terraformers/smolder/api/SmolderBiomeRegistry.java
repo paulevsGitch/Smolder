@@ -160,6 +160,8 @@ public final class SmolderBiomeRegistry
 	public static SmolderBiome getSubBiome(SmolderBiome parent, Random random)
 	{
 		List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
+		if (subbiomes == null)
+			return parent;
 		float w = parent.getSubWeight(random);
 		for (SmolderBiome biome: subbiomes)
 			if (biome.getWeight() <= w)
