@@ -19,7 +19,7 @@ public class SmolderBiomeSource extends BiomeSource
 	{
 		super(Collections.emptyList());
 		this.seed = seed;
-		int sizeXZ = Config.getInt("generator", "biome_size_xz", 200);
+		int sizeXZ = Config.getInt("generator", "biome_size_in_blocks", 200);
 		this.map = new BiomeMap(seed, sizeXZ);
 	}
 

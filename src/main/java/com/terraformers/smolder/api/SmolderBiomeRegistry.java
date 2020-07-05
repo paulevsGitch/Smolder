@@ -66,7 +66,7 @@ public final class SmolderBiomeRegistry
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
 	 * @return edge {@link SmolderBiome}.
 	 */
-	public static SmolderBiome addEdgeBiome(SmolderBiome edge, SmolderBiome parent)
+	public static SmolderBiome registerEdgeBiome(SmolderBiome edge, SmolderBiome parent)
 	{
 		register(edge);
 		if (OVERRIDE || !EDGES.containsKey(parent))
@@ -83,7 +83,7 @@ public final class SmolderBiomeRegistry
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
 	 * @return {@link SmolderBiome} sub-biome.
 	 */
-	public static SmolderBiome addSubBiome(SmolderBiome subbiome, SmolderBiome parent)
+	public static SmolderBiome registerSubBiome(SmolderBiome subbiome, SmolderBiome parent)
 	{
 		register(subbiome);
 		List<SmolderBiome> subbiomes = SUBBIOMES.get(subbiome);
