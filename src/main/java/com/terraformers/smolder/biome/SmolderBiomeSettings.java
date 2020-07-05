@@ -14,8 +14,6 @@ public class SmolderBiomeSettings extends Biome.Settings
 {
 	private float size = SmolderBiomeData.DEF_SIZE;
 	private float weight = SmolderBiomeData.DEF_WEIGHT;
-	private int minHeight = SmolderBiomeData.DEF_MIN_HEIGHT;
-	private int maxHeight = SmolderBiomeData.DEF_MAX_HEIGHT;
 	
 	public SmolderBiomeSettings()
 	{
@@ -59,19 +57,6 @@ public class SmolderBiomeSettings extends Biome.Settings
 		return this;
 	}
 	
-	/**
-	 * Set biome height limits
-	 * @param minHeight - minimum biome height in blocks;
-	 * @param maxHeight - maximum biome height in blocks;
-	 * @return
-	 */
-	public SmolderBiomeSettings setHeight(int minHeight, int maxHeight)
-	{
-		this.minHeight = minHeight;
-		this.maxHeight = maxHeight;
-		return this;
-	}
-	
 	public SmolderBiomeSettings setWeight(float weight)
 	{
 		this.weight = weight;
@@ -81,16 +66,6 @@ public class SmolderBiomeSettings extends Biome.Settings
 	public float getSize()
 	{
 		return size;
-	}
-
-	public int getMinHeight()
-	{
-		return minHeight;
-	}
-
-	public int getMaxHeight()
-	{
-		return maxHeight;
 	}
 
 	public float getWeight()

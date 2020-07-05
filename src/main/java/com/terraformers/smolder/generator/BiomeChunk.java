@@ -28,12 +28,11 @@ public class BiomeChunk
 		
 		for (int y = 0; y < sm_height; y++)
 		{
-			int section = y << 1;
 			for (int x = 0; x < SM_WIDTH; x++)
 			{
 				for (int z = 0; z < SM_WIDTH; z++)
 				{
-					PreBio[y][x][z] = SmolderBiomeRegistry.getRandomBiome(section, random);
+					PreBio[y][x][z] = SmolderBiomeRegistry.getRandomBiome(random);
 				}
 			}
 		}

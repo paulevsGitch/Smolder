@@ -12,10 +12,7 @@ public class SmolderBiome extends Biome
 	
 	private final String registryName;
 	private final float size;
-	private final int minHeight;
-	private final int maxHeight;
-	private final float weight;
-	private final float[] weights;
+	private float weight;
 	private final int id;
 	
 	private float subBiomeWeight = 1;
@@ -31,16 +28,8 @@ public class SmolderBiome extends Biome
 		this.id = globalID++;
 		this.registryName = registryName;
 		this.size = Config.getFloat(group, "size", settings.getSize());
-		this.minHeight = clamp(Config.getInt(group, "minHeight", settings.getMinHeight()) >> 2, 0, 63);
-		this.maxHeight = clamp(Config.getInt(group, "maxHeight", settings.getMaxHeight()) >> 2, 0, 63);
 		
 		this.weight = Config.getFloat(group, "weight", settings.getWeight());
-		this.weights = new float[this.maxHeight - this.minHeight + 1];
-	}
-	
-	private int clamp(int x, int min, int max)
-	{
-		return x < min ? min : x > max ? max : x;
 	}
 	
 	public Biome getBiome()
@@ -67,34 +56,16 @@ public class SmolderBiome extends Biome
 	{
 		return size;
 	}
-
-	public int getMinHeight()
-	{
-		return minHeight;
-	}
-
-	public int getMaxHeight()
-	{
-		return maxHeight;
-	}
 	
 	public float getWeight()
 	{
-		return weights[minHeight];
-	}
-
-	public float getWeight(int section)
-	{
-		if (section < minHeight || section > maxHeight)
-			return 0;
-		return weights[section - minHeight];
+		return weight;
 	}
 	
-	public float addToLayer(int section, float weight)
+	public float addToLayer(float weight)
 	{
-		int index = section - minHeight;
-		weights[index] = weight + this.weight;
-		return weights[index];
+		this.weight += weight;
+		return this.weight;
 	}
 	
 	@Override

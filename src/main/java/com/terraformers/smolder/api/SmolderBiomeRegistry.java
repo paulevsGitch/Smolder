@@ -1,13 +1,14 @@
 package com.terraformers.smolder.api;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.terraformers.smolder.Smolder;
 import com.terraformers.smolder.biome.SmolderBiome;
 import com.terraformers.smolder.biome.SmolderWrappedBiome;
@@ -21,18 +22,12 @@ import net.minecraft.world.biome.Biomes;
 
 public final class SmolderBiomeRegistry
 {
-	private static final Map<Integer, List<SmolderBiome>> BIOMES = Maps.newHashMap();
+	private static final Set<SmolderBiome> BIOMES = Sets.newHashSet();
 	private static final Map<SmolderBiome, SmolderBiome> EDGES = Maps.newHashMap();
 	private static final Map<SmolderBiome, List<SmolderBiome>> SUBBIOMES = Maps.newHashMap();
 	private static final Map<SmolderBiome, SmolderBiome> PARENTS = Maps.newHashMap();
-	private static final float[] WEIGHTS = new float[64]; // 64 is 256/4 - maximum biome rows in world
 	private static final boolean OVERRIDE = Config.getBoolean("generator", "allow_override_existing_biomes", true);
-	
-	static
-	{
-		for (int i = 0; i < 64; i++)
-			BIOMES.put(i, new ArrayList<SmolderBiome>());
-	}
+	private static float weight = 0;
 	
 	// Constants for Vanilla biomes //
 	public static final SmolderBiome NETHER_WASTES_BIOME = registerBiome(Biomes.NETHER_WASTES);
@@ -57,12 +52,10 @@ public final class SmolderBiomeRegistry
 	public static SmolderBiome registerBiome(SmolderBiome biome)
 	{
 		register(biome);
-		for (int section = biome.getMinHeight(); section <= biome.getMaxHeight(); section++)
+		if (OVERRIDE || !BIOMES.contains(biome))
 		{
-			List<SmolderBiome> list = BIOMES.get(section);
-			if (OVERRIDE || !list.contains(biome))
-				list.add(biome);
-			WEIGHTS[section] = biome.addToLayer(section, WEIGHTS[section]);
+			BIOMES.add(biome);
+			weight = biome.addToLayer(weight);
 		}
 		return biome;
 	}
@@ -71,21 +64,26 @@ public final class SmolderBiomeRegistry
 	 * Register and attach an edge biome to specified biome.
 	 * @param edge - a {@link SmolderBiome} that is edge, will be registered;
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
+	 * @return edge {@link SmolderBiome}.
 	 */
-	public static void addEdgeBiome(SmolderBiome edge, SmolderBiome parent)
+	public static SmolderBiome addEdgeBiome(SmolderBiome edge, SmolderBiome parent)
 	{
 		register(edge);
 		if (OVERRIDE || !EDGES.containsKey(parent))
+		{
 			EDGES.put(parent, edge);
-		PARENTS.put(edge, parent);
+			PARENTS.put(edge, parent);
+		}
+		return edge;
 	}
 	
 	/**
 	 * Register and attach a sub-biome to specified biome.
 	 * @param subbiome - a {@link SmolderBiome} that is subbiome, will be registered;
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
+	 * @return {@link SmolderBiome} sub-biome.
 	 */
-	public static void addSubBiome(SmolderBiome subbiome, SmolderBiome parent)
+	public static SmolderBiome addSubBiome(SmolderBiome subbiome, SmolderBiome parent)
 	{
 		register(subbiome);
 		List<SmolderBiome> subbiomes = SUBBIOMES.get(subbiome);
@@ -95,23 +93,24 @@ public final class SmolderBiomeRegistry
 			SUBBIOMES.put(parent, subbiomes);
 		}
 		if (OVERRIDE || !subbiomes.contains(subbiome))
+		{
 			subbiomes.add(subbiome);
-		parent.addSubWeight(subbiome.getWeight());
-		PARENTS.put(subbiome, parent);
+			parent.addSubWeight(subbiome.getWeight());
+			PARENTS.put(subbiome, parent);
+		}
+		return subbiome;
 	}
 	
 	/**
 	 * Return a list of all registered biomes.
 	 * @return {@link List} of {@link SmolderBiome}.
 	 */
-	public static List<Biome> getBiomes()
+	public static List<SmolderBiome> getBiomes()
 	{
 		List<SmolderBiome> biomes = new ArrayList<SmolderBiome>();
-		BIOMES.forEach((section, list) -> {
-			list.forEach((biome -> {
-				if (!biomes.contains(biome))
-					biomes.add(biome);
-			}));
+		BIOMES.forEach((biome) -> {
+			if (!biomes.contains(biome))
+				biomes.add(biome);
 		});
 		return ImmutableList.copyOf(biomes);
 	}
@@ -158,12 +157,12 @@ public final class SmolderBiomeRegistry
 	 * @param random - {@link Random};
 	 * @return weighted {@link SmolderBiome}.
 	 */
-	public static SmolderBiome getRandomBiome(int section, Random random)
+	public static SmolderBiome getRandomBiome(Random random)
 	{
-		float w = random.nextFloat() * WEIGHTS[section];
-		for (SmolderBiome biome: BIOMES.get(section))
+		float w = random.nextFloat() * weight;
+		for (SmolderBiome biome: BIOMES)
 		{
-			if (w < biome.getWeight(section))
+			if (w < biome.getWeight())
 				return biome;
 		}
 		return NETHER_WASTES_BIOME;
@@ -218,25 +217,5 @@ public final class SmolderBiomeRegistry
 			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome))
 				registerBiome(biome);
 		});
-	}
-	
-	/**
-	 * Returns a copy of layer biomes list.
-	 * @param layer - layer index, y/4 [0 - 63].
-	 * @return {@link List} of {@link SmolderBiome}.
-	 */
-	public List<SmolderBiome> getBiomesForLayer(int layer)
-	{
-		List<SmolderBiome> list = BIOMES.get(layer);
-		return list.isEmpty() ? Collections.singletonList(NETHER_WASTES_BIOME) : ImmutableList.copyOf(list);
-	}
-	
-	/**
-	 * Clear all biomes at specified layer. Call this if yoi want to register unique biomes for some layers.
-	 * @param layer - layer index, y/4 [0 - 63].
-	 */
-	public void clearlayer(int layer)
-	{
-		BIOMES.get(layer).clear();
 	}
 }
