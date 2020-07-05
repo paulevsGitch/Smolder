@@ -14,26 +14,20 @@ public final class BiomeMap
 	private static final HashMap<ChunkPos, BiomeChunk> MAPS = new HashMap<ChunkPos, BiomeChunk>();
 	private static final ChunkRandom RANDOM = new ChunkRandom();
 	
-	private final int sizeXZ;
-	private final int sizeY;
-	protected final int maxHeight;
+	private final double sizeXZ;
 	private final int depth;
 	private final int size;
 	private final OpenSimplexNoise noiseX;
-	private final OpenSimplexNoise noiseY;
 	private final OpenSimplexNoise noiseZ;
 	
-	public BiomeMap(long seed, int sizeXZ, int sizeY)
+	public BiomeMap(long seed, int sizeXZ)
 	{
 		RANDOM.setSeed(seed);
 		noiseX = new OpenSimplexNoise(RANDOM.nextLong());
-		noiseY = new OpenSimplexNoise(RANDOM.nextLong());
 		noiseZ = new OpenSimplexNoise(RANDOM.nextLong());
-		this.sizeXZ = sizeXZ;
-		this.sizeY = sizeY;
-		maxHeight = (int) Math.ceil(128F / sizeY);
+		this.sizeXZ = sizeXZ * 0.25;
 		
-		depth = (int) Math.ceil(Math.log(Math.max(sizeXZ, sizeY)) / Math.log(2)) - 2;
+		depth = (int) Math.ceil(Math.log(sizeXZ) / Math.log(2)) - 4;
 		size = 1 << depth;
 	}
 	
@@ -43,28 +37,20 @@ public final class BiomeMap
 			MAPS.clear();
 	}
 	
-	private SmolderBiome getRawBiome(int bx, int by, int bz)
+	private SmolderBiome getRawBiome(int bx, int bz)
 	{
-		double x = bx * size / sizeXZ;
-		double y = by * size / sizeY;
-		double z = bz * size / sizeXZ;
+		double x = (double) bx * size / sizeXZ;
+		double z = (double) bz * size / sizeXZ;
 		double nx = x;
-		double ny = y;
 		double nz = z;
 		
 		double px = bx * 0.2;
-		double py = by * 0.2;
 		double pz = bz * 0.2;
 		
 		for (int i = 0; i < depth; i++)
 		{
 			nx = (x + noiseX.eval(px, pz)) / 2F;
 			nz = (z + noiseZ.eval(px, pz)) / 2F;
-			
-			nz = (z + noiseY.eval(px, pz)) / 2F;
-			
-			y = ny;
-			py = py / 2 + i;
 			
 			x = nx;
 			z = nz;
@@ -80,16 +66,16 @@ public final class BiomeMap
 		if (chunk == null)
 		{
 			RANDOM.setTerrainSeed(cpos.x, cpos.z);
-			chunk = new BiomeChunk(this, RANDOM);
+			chunk = new BiomeChunk(RANDOM);
 			MAPS.put(cpos, chunk);
 		}
 		
-		return chunk.getBiome((int) x, (int) y, (int) z);
+		return chunk.getBiome((int) x, (int) z);
 	}
 	
-	public SmolderBiome getBiome(int x, int y, int z)
+	public SmolderBiome getBiome(int x, int z)
 	{
-		SmolderBiome biome = getRawBiome(x, y > 30 ? y : 30, z);
+		SmolderBiome biome = getRawBiome(x, z);
 		SmolderBiome parent = null;
 		boolean hasEdge = SmolderBiomeRegistry.getEdge(biome) != null ||
 				((parent = SmolderBiomeRegistry.getParent(biome)) != null &&
@@ -102,14 +88,10 @@ public final class BiomeMap
 			
 			int d = (int) Math.ceil(search.getSize() / 4F) << 2;
 			
-			boolean edge = !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, y, z));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, y, z));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, y, z + d));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, y, z - d));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - 1, y, z - 1));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - 1, y, z + 1));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + 1, y, z - 1));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + 1, y, z + 1));
+			boolean edge = !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, z));
+			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, z));
+			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, z + d));
+			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, z - d));
 			
 			if (edge)
 			{

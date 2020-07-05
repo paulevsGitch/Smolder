@@ -8,67 +8,74 @@ import com.terraformers.smolder.biome.SmolderBiome;
 public class BiomeChunk
 {
 	protected static final int WIDTH = 16;
-	private static final int SM_WIDTH = WIDTH >> 1;
-	private static final int MASK_A = SM_WIDTH - 1;
-	private static final int MASK_C = WIDTH - 1;
+	private static final int MASK_W = WIDTH - 1;
+	protected static final int SIZE = WIDTH * WIDTH;
+
+	private final SmolderBiome[] biomes = new SmolderBiome[SIZE];
 	
-	private final int sm_height;
-	private final int maxY;
-	private final int maskB;
-	private final SmolderBiome[][][] PreBio;
-	private final SmolderBiome[][][] biomes;
-	
-	public BiomeChunk(BiomeMap map, Random random)
+	public BiomeChunk(Random random)
 	{
-		sm_height = clampOne(map.maxHeight >> 1);
-		maskB = sm_height - 1;
-		maxY = map.maxHeight - 1;
-		PreBio = new SmolderBiome[sm_height][SM_WIDTH][SM_WIDTH];
-		biomes = new SmolderBiome[map.maxHeight][WIDTH][WIDTH];
+		int[] indexes = new int[SIZE];
 		
-		for (int y = 0; y < sm_height; y++)
+		for (int i = 0; i < SIZE; i++)
+			indexes[i] = i;
+		
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int x = 0; x < SM_WIDTH; x++)
+			int i2 = random.nextInt(SIZE);
+			int a = indexes[i];
+			indexes[i] = indexes[i2];
+			indexes[i2] = a;
+		}
+
+		for (int i: indexes)
+		{
+			if (biomes[i] == null)
 			{
-				for (int z = 0; z < SM_WIDTH; z++)
+				SmolderBiome biome = SmolderBiomeRegistry.getRandomBiome(random);
+				float size = biome.getSize();
+				float r2 = size * size;
+				int x = i / WIDTH;
+				int z = i & MASK_W;
+				int x1 = (int) (x - size);
+				int z1 = (int) (z - size);
+				int x2 = (int) Math.ceil(x + size);
+				int z2 = (int) Math.ceil(z + size);
+				for (int bx = x1; bx <= x2; bx++)
 				{
-					PreBio[y][x][z] = SmolderBiomeRegistry.getRandomBiome(random);
+					if (bx >= 0 && bx < WIDTH)
+					{
+						int bx2 = (bx - x);
+						bx2 *= bx2;
+						for (int bz = z1; bz <= z2; bz++)
+						{
+							if (bz >= 0 && bz < WIDTH)
+							{
+								int bz2 = (bz - z);
+								bz2 *= bz2;
+								if (bx2 + bz2 <= r2)
+								{
+									int i2 = getIndex(bx, bz);
+									if (biomes[i2] == null)
+									{
+										biomes[i2] = SmolderBiomeRegistry.getSubBiome(biome, random);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
-		
-		for (int y = 0; y < map.maxHeight; y++)
-			for (int x = 0; x < WIDTH; x++)
-				for (int z = 0; z < WIDTH; z++)
-				{
-					SmolderBiome biome = PreBio[offsetY(y, random)][offsetXZ(x, random)][offsetXZ(z, random)];
-					biome = SmolderBiomeRegistry.getSubBiome(biome, random);
-					biomes[y][x][z] = biome;
-				}
 	}
 
-	public SmolderBiome getBiome(int x, int y, int z)
+	public SmolderBiome getBiome(int x, int z)
 	{
-		return biomes[clamp(y)][x & MASK_C][z & MASK_C];
+		return biomes[getIndex(x & MASK_W, z & MASK_W)];
 	}
 	
-	private int offsetXZ(int x, Random random)
+	private int getIndex(int x, int z)
 	{
-		return ((x + random.nextInt(2)) >> 1) & MASK_A;
-	}
-	
-	private int offsetY(int y, Random random)
-	{
-		return ((y + random.nextInt(2)) >> 1) & maskB;
-	}
-	
-	private int clamp(int y)
-	{
-		return y < 0 ? 0 : y > maxY ? maxY : y;
-	}
-	
-	private int clampOne(int x)
-	{
-		return x < 1 ? 1 : x;
+		return x * WIDTH + z;
 	}
 }

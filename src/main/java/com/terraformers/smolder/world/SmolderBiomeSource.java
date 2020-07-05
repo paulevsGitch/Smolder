@@ -20,15 +20,14 @@ public class SmolderBiomeSource extends BiomeSource
 		super(Collections.emptyList());
 		this.seed = seed;
 		int sizeXZ = Config.getInt("generator", "biome_size_xz", 200);
-		int sizeY = Config.getInt("generator", "biome_size_y", 40);
-		this.map = new BiomeMap(seed, sizeXZ, sizeY);
+		this.map = new BiomeMap(seed, sizeXZ);
 	}
 
 	@Override
 	public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ)
 	{
-		Biome biome = map.getBiome(biomeX << 2, biomeY << 2, biomeZ << 2).getBiome();
-		if (biomeX == 0 && biomeY == 0 && biomeZ == 0)
+		Biome biome = map.getBiome(biomeX << 2, biomeZ << 2).getBiome();
+		if (biomeX == 0 && biomeZ == 0)
 			map.clearCache();
 		return biome;
 	}
