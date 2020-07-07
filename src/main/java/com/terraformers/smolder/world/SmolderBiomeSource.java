@@ -3,7 +3,6 @@ package com.terraformers.smolder.world;
 import java.util.Collections;
 
 import com.mojang.serialization.Codec;
-import com.terraformers.smolder.config.Config;
 import com.terraformers.smolder.generator.BiomeMap;
 
 import net.minecraft.world.biome.Biome;
@@ -19,8 +18,7 @@ public class SmolderBiomeSource extends BiomeSource
 	{
 		super(Collections.emptyList());
 		this.seed = seed;
-		int sizeXZ = Config.getInt("generator", "biome_size_in_blocks", 200);
-		this.map = new BiomeMap(seed, sizeXZ);
+		this.map = new BiomeMap(seed);
 	}
 
 	@Override

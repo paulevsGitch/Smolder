@@ -4,9 +4,11 @@ import java.util.HashMap;
 
 import com.terraformers.smolder.api.SmolderBiomeRegistry;
 import com.terraformers.smolder.biome.SmolderBiome;
+import com.terraformers.smolder.config.Config;
 import com.terraformers.smolder.noise.OpenSimplexNoise;
 
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.ChunkRandom;
 
 public final class BiomeMap
@@ -19,16 +21,22 @@ public final class BiomeMap
 	private final int size;
 	private final OpenSimplexNoise noiseX;
 	private final OpenSimplexNoise noiseZ;
+	private final double noiseScale;
+	private final boolean useRoundedInterpol;
 	
-	public BiomeMap(long seed, int sizeXZ)
+	public BiomeMap(long seed)
 	{
 		RANDOM.setSeed(seed);
 		noiseX = new OpenSimplexNoise(RANDOM.nextLong());
 		noiseZ = new OpenSimplexNoise(RANDOM.nextLong());
-		this.sizeXZ = sizeXZ * 0.25;
+		
+		sizeXZ = Config.getInt("generator", "biome_size_in_blocks", 200) / BiomeChunk.SCALE;
 		
 		depth = (int) Math.ceil(Math.log(sizeXZ) / Math.log(2)) - 4;
 		size = 1 << depth;
+		
+		noiseScale = Config.getFloat("generator", "noise_scale", 0.05F);
+		useRoundedInterpol = Config.getBoolean("generator", "use_rounded_interpolation", false);
 	}
 	
 	public void clearCache()
@@ -49,8 +57,8 @@ public final class BiomeMap
 		
 		for (int i = 0; i < depth; i++)
 		{
-			nx = (x + noiseX.eval(px, pz)) / 2F;
-			nz = (z + noiseZ.eval(px, pz)) / 2F;
+			nx = (x + noiseX.eval(px, pz) * noiseScale) / 2F;
+			nz = (z + noiseZ.eval(px, pz) * noiseScale) / 2F;
 			
 			x = nx;
 			z = nz;
@@ -70,7 +78,7 @@ public final class BiomeMap
 			MAPS.put(cpos, chunk);
 		}
 		
-		return chunk.getBiome((int) x, (int) z);
+		return useRoundedInterpol ? chunk.getBiome(x, z) : chunk.getBiome(MathHelper.floor(x), MathHelper.floor(z));
 	}
 	
 	public SmolderBiome getBiome(int x, int z)

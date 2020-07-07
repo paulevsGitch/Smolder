@@ -7,7 +7,8 @@ import com.terraformers.smolder.biome.SmolderBiome;
 
 public class BiomeChunk
 {
-	protected static final int WIDTH = 16;
+	protected static final int WIDTH = 32;
+	protected static final int SCALE = 4;
 	private static final int MASK_W = WIDTH - 1;
 	protected static final int SIZE = WIDTH * WIDTH;
 
@@ -33,7 +34,7 @@ public class BiomeChunk
 			if (biomes[i] == null)
 			{
 				SmolderBiome biome = SmolderBiomeRegistry.getRandomBiome(random);
-				float size = biome.getSize();
+				float size = biome.getSize() * SCALE;
 				float r2 = size * size;
 				int x = i / WIDTH;
 				int z = i & MASK_W;
@@ -69,6 +70,12 @@ public class BiomeChunk
 		}
 	}
 
+	/**
+	 * Directly takes biome from chunk, "nearest neighbor" algorithm.
+	 * @param x - double coordinate
+	 * @param z - double coordinate
+	 * @return {@link SmolderBiome}
+	 */
 	public SmolderBiome getBiome(int x, int z)
 	{
 		return biomes[getIndex(x & MASK_W, z & MASK_W)];
@@ -77,5 +84,25 @@ public class BiomeChunk
 	private int getIndex(int x, int z)
 	{
 		return x * WIDTH + z;
+	}
+	
+	/**
+	 * Returns more "smoothed" interpolation when the direct one.
+	 * @param x - double coordinate
+	 * @param z - double coordinate
+	 * @return {@link SmolderBiome}
+	 */
+	public SmolderBiome getBiome(double x, double z)
+	{
+		int bx = (int) Math.floor(x % WIDTH + periodic(z) * 0.3);// & MASK_W;
+		int bz = (int) Math.floor(z % WIDTH + periodic(x) * 0.3);// & MASK_W;
+		bx = bx < 0 ? 0 : bx > MASK_W ? MASK_W : bx;
+		bz = bz < 0 ? 0 : bz > MASK_W ? MASK_W : bz;
+		return biomes[getIndex(bx, bz)];
+	}
+	
+	private double periodic(double x)
+	{
+		return (Math.sin(x * Math.PI));
 	}
 }
