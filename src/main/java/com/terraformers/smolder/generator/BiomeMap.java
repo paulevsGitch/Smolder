@@ -22,7 +22,7 @@ public final class BiomeMap
 	private final OpenSimplexNoise noiseX;
 	private final OpenSimplexNoise noiseZ;
 	private final double noiseScale;
-	private final double noiseRougness;
+	private final double noisePower;
 	private final boolean useRoundedInterpol;
 	
 	public BiomeMap(long seed)
@@ -37,7 +37,7 @@ public final class BiomeMap
 		size = 1 << depth;
 		
 		noiseScale = Config.getFloat("generator", "noise_scale", 0.05F);
-		noiseRougness = Config.getFloat("generator", "noise_scale", 1.5F);
+		noisePower = Config.getFloat("generator", "noise_power", 1.5F);
 		useRoundedInterpol = Config.getBoolean("generator", "use_rounded_interpolation", false);
 	}
 	
@@ -59,8 +59,8 @@ public final class BiomeMap
 		
 		for (int i = 0; i < depth; i++)
 		{
-			nx = (x + noiseX.eval(px, pz) * noiseRougness) / 2F;
-			nz = (z + noiseZ.eval(px, pz) * noiseRougness) / 2F;
+			nx = (x + noiseX.eval(px, pz) * noisePower) / 2F;
+			nz = (z + noiseZ.eval(px, pz) * noisePower) / 2F;
 			
 			x = nx;
 			z = nz;
