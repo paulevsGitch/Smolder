@@ -38,7 +38,7 @@ public final class BiomeMap
 		
 		noiseScale = Config.getFloat("generator", "noise_scale", 0.05F);
 		noisePower = Config.getFloat("generator", "noise_power", 1.5F);
-		useRoundedInterpol = Config.getBoolean("generator", "use_rounded_interpolation", false);
+		useRoundedInterpol = Config.getBoolean("generator", "use_rounded_interpolation", true);
 	}
 	
 	public void clearCache()

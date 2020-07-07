@@ -94,11 +94,16 @@ public class BiomeChunk
 	 */
 	public SmolderBiome getBiome(double x, double z)
 	{
-		int bx = (int) Math.floor(x % WIDTH + periodic(z) * 0.3);// & MASK_W;
-		int bz = (int) Math.floor(z % WIDTH + periodic(x) * 0.3);// & MASK_W;
+		int bx = (int) Math.floor(wrap(x) + periodic(z) * 0.3);// & MASK_W;
+		int bz = (int) Math.floor(wrap(z)  + periodic(x) * 0.3);// & MASK_W;
 		bx = bx < 0 ? 0 : bx > MASK_W ? MASK_W : bx;
 		bz = bz < 0 ? 0 : bz > MASK_W ? MASK_W : bz;
 		return biomes[getIndex(bx, bz)];
+	}
+	
+	private double wrap(double x)
+	{
+		return x - Math.floor(x / WIDTH) * WIDTH;
 	}
 	
 	private double periodic(double x)
