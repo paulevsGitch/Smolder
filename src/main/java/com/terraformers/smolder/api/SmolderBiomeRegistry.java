@@ -9,7 +9,6 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.terraformers.smolder.Smolder;
 import com.terraformers.smolder.biome.SmolderBiome;
 import com.terraformers.smolder.biome.SmolderWrappedBiome;
 import com.terraformers.smolder.config.Config;
@@ -42,16 +41,17 @@ public final class SmolderBiomeRegistry
 	 */
 	public static SmolderBiome registerBiome(Biome biome)
 	{
-		return registerBiome(new SmolderWrappedBiome(biome));
+		Identifier id = Registry.BIOME.getId(biome);
+		return registerBiome(id, new SmolderWrappedBiome(biome));
 	}
 
 	/**
 	 * Put biome into registry.
 	 * @param biome - a {@link SmolderBiome} to register.
 	 */
-	public static SmolderBiome registerBiome(SmolderBiome biome)
+	public static SmolderBiome registerBiome(Identifier id, SmolderBiome biome)
 	{
-		register(biome);
+		register(id, biome);
 		if (OVERRIDE || !BIOMES.contains(biome))
 		{
 			BIOMES.add(biome);
@@ -66,9 +66,9 @@ public final class SmolderBiomeRegistry
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
 	 * @return edge {@link SmolderBiome}.
 	 */
-	public static SmolderBiome registerEdgeBiome(SmolderBiome edge, SmolderBiome parent)
+	public static SmolderBiome registerEdgeBiome(Identifier id, SmolderBiome edge, SmolderBiome parent)
 	{
-		register(edge);
+		register(id, edge);
 		if (OVERRIDE || !EDGES.containsKey(parent))
 		{
 			EDGES.put(parent, edge);
@@ -83,9 +83,9 @@ public final class SmolderBiomeRegistry
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
 	 * @return {@link SmolderBiome} sub-biome.
 	 */
-	public static SmolderBiome registerSubBiome(SmolderBiome subbiome, SmolderBiome parent)
+	public static SmolderBiome registerSubBiome(Identifier id, SmolderBiome subbiome, SmolderBiome parent)
 	{
-		register(subbiome);
+		register(id, subbiome);
 		List<SmolderBiome> subbiomes = SUBBIOMES.get(subbiome);
 		if (subbiomes == null)
 		{
@@ -135,10 +135,10 @@ public final class SmolderBiomeRegistry
 		return SUBBIOMES.get(biome);
 	}
 	
-	private static void register(SmolderBiome biome)
+	private static void register(Identifier id, SmolderBiome biome)
 	{
 		if (!(biome instanceof SmolderWrappedBiome))
-			Registry.register(Registry.BIOME, new Identifier(Smolder.MOD_ID, biome.getRegistryName()), biome);
+			Registry.register(Registry.BIOME, id, biome);
 	}
 	
 	/**

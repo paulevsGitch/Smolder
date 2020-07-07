@@ -9,7 +9,7 @@ public class SmolderWrappedBiome extends SmolderBiome
 	
 	public SmolderWrappedBiome(Biome biome)
 	{
-		super(Registry.BIOME.getId(biome).toString(), new SmolderBiomeSettings(biome));
+		super(Registry.BIOME.getId(biome), new SmolderBiomeSettings(biome));
 		this.biome = biome;
 	}
 	
