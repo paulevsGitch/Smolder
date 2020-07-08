@@ -177,7 +177,7 @@ public class BiomeChunk
 									if (bx2 + bz2 <= r2)
 									{
 										int i2 = getIndex(bx, bz);
-										if (biomes[i2] == parent)
+										if (biomes[i2] == parent && (!hasSub || list2.contains(i2)))
 										{
 											biomes[i2] = biome;
 											if (hasSub && biome != parent)
@@ -195,6 +195,8 @@ public class BiomeChunk
 			SUBLIST.clear();
 			SUBLIST.putAll(SUBLIST2);
 		}
+		
+		SUBLIST2.clear();
 	}
 
 	/**
