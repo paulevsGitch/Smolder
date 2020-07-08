@@ -1,7 +1,5 @@
 package com.terraformers.smolder.biome;
 
-import java.util.Random;
-
 import com.terraformers.smolder.config.Config;
 
 import net.minecraft.util.Identifier;
@@ -14,8 +12,6 @@ public class SmolderBiome extends Biome
 	private final float size;
 	private float weight;
 	private final int id;
-	
-	private float subBiomeWeight = 1;
 	
 	public SmolderBiome(Identifier id, SmolderBiomeSettings settings)
 	{
@@ -32,16 +28,6 @@ public class SmolderBiome extends Biome
 	{
 		return this;
 	}
-	
-	public float getSubWeight(Random random)
-	{
-		return random.nextFloat() * subBiomeWeight;
-	}
-	
-	public void addSubWeight(float weight)
-	{
-		subBiomeWeight += weight;
-	}
 
 	public float getSize()
 	{
@@ -53,7 +39,7 @@ public class SmolderBiome extends Biome
 		return weight;
 	}
 	
-	public float addToLayer(float weight)
+	public float addWeight(float weight)
 	{
 		this.weight += weight;
 		return this.weight;

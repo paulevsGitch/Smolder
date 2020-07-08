@@ -25,6 +25,7 @@ public final class SmolderBiomeRegistry
 	private static final Map<SmolderBiome, SmolderBiome> EDGES = Maps.newHashMap();
 	private static final Map<SmolderBiome, List<SmolderBiome>> SUBBIOMES = Maps.newHashMap();
 	private static final Map<SmolderBiome, SmolderBiome> PARENTS = Maps.newHashMap();
+	private static final Map<SmolderBiome, Float> WEIGHTS = Maps.newHashMap();
 	private static final boolean OVERRIDE = Config.getBoolean("generator", "allow_override_existing_biomes", true);
 	private static float weight = 0;
 	
@@ -55,7 +56,7 @@ public final class SmolderBiomeRegistry
 		if (OVERRIDE || !BIOMES.contains(biome))
 		{
 			BIOMES.add(biome);
-			weight = biome.addToLayer(weight);
+			weight = biome.addWeight(weight);
 		}
 		return biome;
 	}
@@ -86,7 +87,7 @@ public final class SmolderBiomeRegistry
 	public static SmolderBiome registerSubBiome(Identifier id, SmolderBiome subbiome, SmolderBiome parent)
 	{
 		register(id, subbiome);
-		List<SmolderBiome> subbiomes = SUBBIOMES.get(subbiome);
+		List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
 		if (subbiomes == null)
 		{
 			subbiomes = new ArrayList<SmolderBiome>();
@@ -94,8 +95,11 @@ public final class SmolderBiomeRegistry
 		}
 		if (OVERRIDE || !subbiomes.contains(subbiome))
 		{
+			Float weight = WEIGHTS.get(parent);
+			if (weight == null)
+				weight = 1F;
 			subbiomes.add(subbiome);
-			parent.addSubWeight(subbiome.getWeight());
+			weight = subbiome.addWeight(weight);
 			PARENTS.put(subbiome, parent);
 		}
 		return subbiome;
@@ -179,9 +183,11 @@ public final class SmolderBiomeRegistry
 		List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
 		if (subbiomes == null)
 			return parent;
-		float w = parent.getSubWeight(random);
+		Float weight = WEIGHTS.get(parent) * random.nextFloat();
+		if (weight <= 1)
+			return parent;
 		for (SmolderBiome biome: subbiomes)
-			if (biome.getWeight() <= w)
+			if (biome.getWeight() <= weight)
 				return biome;
 		return parent;
 	}
