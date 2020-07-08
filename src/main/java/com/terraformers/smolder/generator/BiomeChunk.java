@@ -13,7 +13,7 @@ public class BiomeChunk
 {
 	protected static final int WIDTH = 32;
 	protected static final int SCALE = 4;
-	private static final int MASK_W = WIDTH - 1;
+	protected static final int MASK_W = WIDTH - 1;
 	protected static final int SIZE = WIDTH * WIDTH;
 
 	private final SmolderBiome[] biomes = new SmolderBiome[SIZE];

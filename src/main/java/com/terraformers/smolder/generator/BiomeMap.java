@@ -36,8 +36,8 @@ public final class BiomeMap
 		depth = (int) Math.ceil(Math.log(sizeXZ) / Math.log(2)) - 4;
 		size = 1 << depth;
 		
-		noiseScale = Config.getFloat("generator", "noise_scale", 0.05F);
-		noisePower = Config.getFloat("generator", "noise_power", 1.5F);
+		noiseScale = Config.getFloat("generator", "noise_scale", 0.1F);
+		noisePower = Config.getFloat("generator", "noise_power", 1.0F);
 		useRoundedInterpol = Config.getBoolean("generator", "use_rounded_interpolation", true);
 	}
 	
@@ -69,9 +69,18 @@ public final class BiomeMap
 			pz = pz / 2 + i;
 		}
 		
-		ChunkPos cpos = new ChunkPos(
-				(int) Math.floor((double) x / BiomeChunk.WIDTH),
-				(int) Math.floor((double) z / BiomeChunk.WIDTH));
+		bx = (int) Math.floor(x);
+		bz = (int) Math.floor(z);
+		if ((bx & BiomeChunk.MASK_W) == BiomeChunk.MASK_W)
+		{
+			x += (bz / 2) & 1;
+		}
+		if ((bz & BiomeChunk.MASK_W) == BiomeChunk.MASK_W)
+		{
+			z += (bx / 2) & 1;
+		}
+		
+		ChunkPos cpos = new ChunkPos(MathHelper.floor((double) x / BiomeChunk.WIDTH), MathHelper.floor((double) z / BiomeChunk.WIDTH));
 		BiomeChunk chunk = MAPS.get(cpos);
 		if (chunk == null)
 		{
