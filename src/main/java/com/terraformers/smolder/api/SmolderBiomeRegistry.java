@@ -52,11 +52,14 @@ public final class SmolderBiomeRegistry
 	 */
 	public static SmolderBiome registerBiome(Identifier id, SmolderBiome biome)
 	{
-		register(id, biome);
-		if (OVERRIDE || !BIOMES.contains(biome))
+		if (biome.getWeight() > 0)
 		{
-			BIOMES.add(biome);
-			weight = biome.addWeight(weight);
+			register(id, biome);
+			if (OVERRIDE || !BIOMES.contains(biome))
+			{
+				BIOMES.add(biome);
+				weight = biome.addWeight(weight);
+			}
 		}
 		return biome;
 	}
@@ -86,21 +89,25 @@ public final class SmolderBiomeRegistry
 	 */
 	public static SmolderBiome registerSubBiome(Identifier id, SmolderBiome subbiome, SmolderBiome parent)
 	{
-		register(id, subbiome);
-		List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
-		if (subbiomes == null)
+		if (subbiome.getWeight() > 0)
 		{
-			subbiomes = new ArrayList<SmolderBiome>();
-			SUBBIOMES.put(parent, subbiomes);
-		}
-		if (OVERRIDE || !subbiomes.contains(subbiome))
-		{
-			Float weight = WEIGHTS.get(parent);
-			if (weight == null)
-				weight = 1F;
-			subbiomes.add(subbiome);
-			weight = subbiome.addWeight(weight);
-			PARENTS.put(subbiome, parent);
+			register(id, subbiome);
+			List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
+			if (subbiomes == null)
+			{
+				subbiomes = new ArrayList<SmolderBiome>();
+				SUBBIOMES.put(parent, subbiomes);
+			}
+			if (OVERRIDE || !subbiomes.contains(subbiome))
+			{
+				Float weight = WEIGHTS.get(parent);
+				if (weight == null)
+					weight = 1F;
+				subbiomes.add(subbiome);
+				weight = subbiome.addWeight(weight);
+				PARENTS.put(subbiome, parent);
+				WEIGHTS.put(parent, weight);
+			}
 		}
 		return subbiome;
 	}
@@ -223,5 +230,12 @@ public final class SmolderBiomeRegistry
 			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome))
 				registerBiome(biome);
 		});
+	}
+	
+	public static void register() {}
+	
+	public static boolean hasSubBiomes(SmolderBiome biome)
+	{
+		return SUBBIOMES.get(biome) != null;
 	}
 }

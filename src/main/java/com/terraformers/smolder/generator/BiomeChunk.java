@@ -1,7 +1,11 @@
 package com.terraformers.smolder.generator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.Maps;
 import com.terraformers.smolder.api.SmolderBiomeRegistry;
 import com.terraformers.smolder.biome.SmolderBiome;
 
@@ -13,6 +17,9 @@ public class BiomeChunk
 	protected static final int SIZE = WIDTH * WIDTH;
 
 	private final SmolderBiome[] biomes = new SmolderBiome[SIZE];
+	
+	private static final HashMap<SmolderBiome, List<Integer>> SUBLIST = Maps.newHashMap();
+	private static final HashMap<SmolderBiome, List<Integer>> SUBLIST2 = Maps.newHashMap();
 	
 	public BiomeChunk(Random random)
 	{
@@ -67,6 +74,126 @@ public class BiomeChunk
 					}
 				}
 			}
+		}
+		
+		SUBLIST.clear();
+		List<Integer> list = null;
+		for (int i: indexes)
+		{
+			if (biomes[i] == null)
+			{
+				SmolderBiome biome = SmolderBiomeRegistry.getRandomBiome(random);
+				boolean hasSub = SmolderBiomeRegistry.hasSubBiomes(biome);
+				
+				if (hasSub)
+				{
+					list = SUBLIST.get(biome);
+					if (list == null)
+					{
+						list = new ArrayList<Integer>();
+						SUBLIST.put(biome, list);
+					}
+				}
+				
+				float size = biome.getSize() * SCALE;
+				float r2 = size * size;
+				int x = i / WIDTH;
+				int z = i & MASK_W;
+				int x1 = (int) (x - size);
+				int z1 = (int) (z - size);
+				int x2 = (int) Math.ceil(x + size);
+				int z2 = (int) Math.ceil(z + size);
+				for (int bx = x1; bx <= x2; bx++)
+				{
+					if (bx >= 0 && bx < WIDTH)
+					{
+						int bx2 = (bx - x);
+						bx2 *= bx2;
+						for (int bz = z1; bz <= z2; bz++)
+						{
+							if (bz >= 0 && bz < WIDTH)
+							{
+								int bz2 = (bz - z);
+								bz2 *= bz2;
+								if (bx2 + bz2 <= r2)
+								{
+									int i2 = getIndex(bx, bz);
+									if (biomes[i2] == null)
+									{
+										biomes[i2] = biome;//SmolderBiomeRegistry.getSubBiome(biome, random);
+										if (hasSub)
+										{
+											list.add(i2);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		while (!SUBLIST.isEmpty())
+		{
+			SUBLIST2.clear();
+			SUBLIST.forEach((parent, ind) -> {
+				for (int i: ind)
+				{
+					SmolderBiome biome = SmolderBiomeRegistry.getSubBiome(parent, random);
+					boolean hasSub = SmolderBiomeRegistry.hasSubBiomes(biome);
+
+					List<Integer> list2 = null;
+					if (hasSub)
+					{
+						list2 = SUBLIST2.get(biome);
+						if (list2 == null)
+						{
+							list2 = new ArrayList<Integer>();
+							SUBLIST2.put(biome, list2);
+						}
+					}
+
+					float size = biome.getSize() * SCALE;
+					float r2 = size * size;
+					int x = i / WIDTH;
+					int z = i & MASK_W;
+					int x1 = (int) (x - size);
+					int z1 = (int) (z - size);
+					int x2 = (int) Math.ceil(x + size);
+					int z2 = (int) Math.ceil(z + size);
+					for (int bx = x1; bx <= x2; bx++)
+					{
+						if (bx >= 0 && bx < WIDTH)
+						{
+							int bx2 = (bx - x);
+							bx2 *= bx2;
+							for (int bz = z1; bz <= z2; bz++)
+							{
+								if (bz >= 0 && bz < WIDTH)
+								{
+									int bz2 = (bz - z);
+									bz2 *= bz2;
+									if (bx2 + bz2 <= r2)
+									{
+										int i2 = getIndex(bx, bz);
+										if (biomes[i2] == parent)
+										{
+											biomes[i2] = biome;
+											if (hasSub && biome != parent)
+											{
+												list2.add(i2);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+			SUBLIST.clear();
+			SUBLIST.putAll(SUBLIST2);
 		}
 	}
 
