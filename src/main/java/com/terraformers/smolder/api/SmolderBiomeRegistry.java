@@ -217,8 +217,7 @@ public final class SmolderBiomeRegistry
 	 */
 	public static boolean isSameBiome(SmolderBiome source, SmolderBiome compare)
 	{
-		SmolderBiome parent;
-		return compare == source || (((parent = getParent(compare)) != null) && parent == source);
+		return compare == source || hasBiomeAsParent(compare, source);
 	}
 	
 	/**
@@ -237,5 +236,17 @@ public final class SmolderBiomeRegistry
 	public static boolean hasSubBiomes(SmolderBiome biome)
 	{
 		return SUBBIOMES.get(biome) != null;
+	}
+	
+	public static boolean hasBiomeAsParent(SmolderBiome biome, SmolderBiome parent)
+	{
+		SmolderBiome par = SmolderBiomeRegistry.getParent(biome);
+		while (par != null)
+		{
+			if (par == parent)
+				return true;
+			par = SmolderBiomeRegistry.getParent(par);
+		}
+		return false;
 	}
 }

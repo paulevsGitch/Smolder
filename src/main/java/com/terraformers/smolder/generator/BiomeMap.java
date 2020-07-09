@@ -105,12 +105,16 @@ public final class BiomeMap
 			if (parent != null)
 				search = parent;
 			
-			int d = (int) Math.ceil(search.getSize() / 4F) << 2;
-			
-			boolean edge = !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, z));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, z));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, z + d));
-			edge = edge || !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, z - d));
+			int d = (int) SmolderBiomeRegistry.getEdge(search).getSize();
+
+			boolean edge = !SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, z)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, z)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, z + d)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x, z - d)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, z - d)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, z - d)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, z + d)) ||
+					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, z + d));
 			
 			if (edge)
 			{
