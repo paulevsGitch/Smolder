@@ -10,13 +10,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 
-public class SmolderBiomeSettings extends Biome.Settings
-{
+public class SmolderBiomeSettings extends Biome.Settings {
 	private float size = SmolderBiomeData.DEF_SIZE;
 	private float weight = SmolderBiomeData.DEF_WEIGHT;
 	
-	public SmolderBiomeSettings()
-	{
+	public SmolderBiomeSettings() {
 		this.configureSurfaceBuilder(SurfaceBuilder.NETHER, SurfaceBuilder.NETHER_CONFIG);
 		this.precipitation(Biome.Precipitation.NONE);
 		this.category(Biome.Category.NETHER);
@@ -37,8 +35,7 @@ public class SmolderBiomeSettings extends Biome.Settings
 		this.noises(ImmutableList.of(new Biome.MixedNoisePoint(0.0F, 0.0F, 0.0F, 0.0F, 0.0F)));
 	}
 	
-	public SmolderBiomeSettings(Biome biome)
-	{
+	public SmolderBiomeSettings(Biome biome) {
 		super();
 		this.surfaceBuilder(biome.getSurfaceBuilder());
 		this.precipitation(biome.getPrecipitation());
@@ -51,25 +48,21 @@ public class SmolderBiomeSettings extends Biome.Settings
 		this.effects(biome.getEffects());
 	}
 	
-	public SmolderBiomeSettings setSize(float size)
-	{
+	public SmolderBiomeSettings setSize(float size) {
 		this.size = size;
 		return this;
 	}
 	
-	public SmolderBiomeSettings setWeight(float weight)
-	{
+	public SmolderBiomeSettings setWeight(float weight) {
 		this.weight = weight;
 		return this;
 	}
 
-	public float getSize()
-	{
+	public float getSize() {
 		return size;
 	}
 
-	public float getWeight()
-	{
+	public float getWeight() {
 		return weight;
 	}
 }

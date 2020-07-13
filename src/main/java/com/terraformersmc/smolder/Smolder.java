@@ -10,27 +10,26 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome.Category;
 
-public class Smolder implements ModInitializer
-{
+public class Smolder implements ModInitializer {
+
 	public static final String MOD_ID = "smolder";
 	
 	@Override
-	public void onInitialize()
-	{
+	public void onInitialize() {
 		SmolderBiomeRegistry.init();
 		Registry.register(Registry.BIOME_SOURCE, new Identifier(MOD_ID, "smolder_biome_source"), SmolderBiomeSource.CODEC);
-		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, id, biome) -> { SmolderBiomeRegistry.registerBiome(biome); });
+		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, id, biome) -> SmolderBiomeRegistry.registerBiome(biome));
 		registerExistingBiomes();
 	}
 	
 	/**
 	 * Register existing biomes on library startup. Must be called once.
 	 */
-	private void registerExistingBiomes()
-	{
+	private void registerExistingBiomes() {
 		Registry.BIOME.forEach((biome) -> {
-			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome))
+			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome)) {
 				SmolderBiomeRegistry.registerBiome(biome);
+			}
 		});
 	}
 }

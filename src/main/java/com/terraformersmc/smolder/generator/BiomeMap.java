@@ -11,8 +11,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.ChunkRandom;
 
-public final class BiomeMap
-{
+public final class BiomeMap {
 	private static final HashMap<ChunkPos, BiomeChunk> MAPS = new HashMap<ChunkPos, BiomeChunk>();
 	private static final ChunkRandom RANDOM = new ChunkRandom();
 	
@@ -25,8 +24,7 @@ public final class BiomeMap
 	private final double noisePower;
 	private final boolean useRoundedInterpol;
 	
-	public BiomeMap(long seed)
-	{
+	public BiomeMap(long seed) {
 		RANDOM.setSeed(seed);
 		noiseX = new OpenSimplexNoise(RANDOM.nextLong());
 		noiseZ = new OpenSimplexNoise(RANDOM.nextLong());
@@ -41,14 +39,13 @@ public final class BiomeMap
 		useRoundedInterpol = Config.getBoolean("generator", "use_rounded_interpolation", true);
 	}
 	
-	public void clearCache()
-	{
-		if (MAPS.size() > 16)
+	public void clearCache() {
+		if (MAPS.size() > 16) {
 			MAPS.clear();
+		}
 	}
 	
-	private SmolderBiome getRawBiome(int bx, int bz)
-	{
+	private SmolderBiome getRawBiome(int bx, int bz) {
 		double x = (double) bx * size / sizeXZ;
 		double z = (double) bz * size / sizeXZ;
 		double nx = x;
@@ -57,8 +54,7 @@ public final class BiomeMap
 		double px = bx * noiseScale;
 		double pz = bz * noiseScale;
 		
-		for (int i = 0; i < depth; i++)
-		{
+		for (int i = 0; i < depth; i++) {
 			nx = (x + noiseX.eval(px, pz) * noisePower) / 2F;
 			nz = (z + noiseZ.eval(px, pz) * noisePower) / 2F;
 			
@@ -71,19 +67,16 @@ public final class BiomeMap
 		
 		bx = (int) Math.floor(x);
 		bz = (int) Math.floor(z);
-		if ((bx & BiomeChunk.MASK_W) == BiomeChunk.MASK_W)
-		{
+		if ((bx & BiomeChunk.MASK_W) == BiomeChunk.MASK_W) {
 			x += (bz / 2) & 1;
 		}
-		if ((bz & BiomeChunk.MASK_W) == BiomeChunk.MASK_W)
-		{
+		if ((bz & BiomeChunk.MASK_W) == BiomeChunk.MASK_W) {
 			z += (bx / 2) & 1;
 		}
 		
 		ChunkPos cpos = new ChunkPos(MathHelper.floor((double) x / BiomeChunk.WIDTH), MathHelper.floor((double) z / BiomeChunk.WIDTH));
 		BiomeChunk chunk = MAPS.get(cpos);
-		if (chunk == null)
-		{
+		if (chunk == null) {
 			RANDOM.setTerrainSeed(cpos.x, cpos.z);
 			chunk = new BiomeChunk(RANDOM);
 			MAPS.put(cpos, chunk);
@@ -92,18 +85,15 @@ public final class BiomeMap
 		return useRoundedInterpol ? chunk.getBiome(x, z) : chunk.getBiome(MathHelper.floor(x), MathHelper.floor(z));
 	}
 	
-	public SmolderBiome getBiome(int x, int z)
-	{
+	public SmolderBiome getBiome(int x, int z) {
 		SmolderBiome biome = getRawBiome(x, z);
 		SmolderBiome parent = null;
-		boolean hasEdge = SmolderBiomeRegistry.getEdge(biome) != null ||
-				((parent = SmolderBiomeRegistry.getParent(biome)) != null &&
-				SmolderBiomeRegistry.getEdge(parent) != null);
-		if (hasEdge)
-		{
+		boolean hasEdge = SmolderBiomeRegistry.getEdge(biome) != null || ((parent = SmolderBiomeRegistry.getParent(biome)) != null && SmolderBiomeRegistry.getEdge(parent) != null);
+		if (hasEdge) {
 			SmolderBiome search = biome;
-			if (parent != null)
+			if (parent != null) {
 				search = parent;
+			}
 			
 			int d = (int) SmolderBiomeRegistry.getEdge(search).getSize();
 
@@ -116,8 +106,7 @@ public final class BiomeMap
 					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x + d, z + d)) ||
 					!SmolderBiomeRegistry.isSameBiome(search, getRawBiome(x - d, z + d));
 			
-			if (edge)
-			{
+			if (edge) {
 				return SmolderBiomeRegistry.getEdge(search);
 			}
 		}
