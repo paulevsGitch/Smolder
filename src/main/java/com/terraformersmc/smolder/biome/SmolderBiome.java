@@ -1,6 +1,6 @@
-package com.terraformers.smolder.biome;
+package com.terraformersmc.smolder.biome;
 
-import com.terraformers.smolder.config.Config;
+import com.terraformersmc.smolder.config.Config;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;

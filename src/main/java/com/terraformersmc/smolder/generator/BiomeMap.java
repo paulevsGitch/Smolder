@@ -1,11 +1,11 @@
-package com.terraformers.smolder.generator;
+package com.terraformersmc.smolder.generator;
 
 import java.util.HashMap;
 
-import com.terraformers.smolder.api.SmolderBiomeRegistry;
-import com.terraformers.smolder.biome.SmolderBiome;
-import com.terraformers.smolder.config.Config;
-import com.terraformers.smolder.noise.OpenSimplexNoise;
+import com.terraformersmc.smolder.api.SmolderBiomeRegistry;
+import com.terraformersmc.smolder.biome.SmolderBiome;
+import com.terraformersmc.smolder.config.Config;
+import com.terraformersmc.smolder.noise.OpenSimplexNoise;
 
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;

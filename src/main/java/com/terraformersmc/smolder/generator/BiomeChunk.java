@@ -1,4 +1,4 @@
-package com.terraformers.smolder.generator;
+package com.terraformersmc.smolder.generator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Maps;
-import com.terraformers.smolder.api.SmolderBiomeRegistry;
-import com.terraformers.smolder.biome.SmolderBiome;
+import com.terraformersmc.smolder.api.SmolderBiomeRegistry;
+import com.terraformersmc.smolder.biome.SmolderBiome;
 
 public class BiomeChunk
 {

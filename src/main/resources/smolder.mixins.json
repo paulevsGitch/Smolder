@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.terraformers.smolder.mixin",
+  "package": "com.terraformersmc.smolder.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinDimensionType",

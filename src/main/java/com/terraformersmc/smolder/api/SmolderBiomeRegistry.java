@@ -1,4 +1,4 @@
-package com.terraformers.smolder.api;
+package com.terraformersmc.smolder.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.terraformers.smolder.biome.SmolderBiome;
-import com.terraformers.smolder.biome.SmolderBiomeSettings;
-import com.terraformers.smolder.config.Config;
+import com.terraformersmc.smolder.biome.SmolderBiome;
+import com.terraformersmc.smolder.biome.SmolderBiomeSettings;
+import com.terraformersmc.smolder.config.Config;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

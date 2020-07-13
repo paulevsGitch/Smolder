@@ -1,4 +1,4 @@
-package com.terraformers.smolder.biome;
+package com.terraformersmc.smolder.biome;
 
 import com.google.common.collect.ImmutableList;
 

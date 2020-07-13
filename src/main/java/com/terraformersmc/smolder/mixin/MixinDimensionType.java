@@ -1,9 +1,9 @@
-package com.terraformers.smolder.mixin;
+package com.terraformersmc.smolder.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import com.terraformers.smolder.world.SmolderBiomeSource;
+import com.terraformersmc.smolder.world.SmolderBiomeSource;
 
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.chunk.ChunkGenerator;

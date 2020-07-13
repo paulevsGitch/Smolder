@@ -1,8 +1,8 @@
-package com.terraformers.smolder;
+package com.terraformersmc.smolder;
 
-import com.terraformers.smolder.api.SmolderBiomeRegistry;
-import com.terraformers.smolder.biome.SmolderBiome;
-import com.terraformers.smolder.world.SmolderBiomeSource;
+import com.terraformersmc.smolder.api.SmolderBiomeRegistry;
+import com.terraformersmc.smolder.biome.SmolderBiome;
+import com.terraformersmc.smolder.world.SmolderBiomeSource;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;

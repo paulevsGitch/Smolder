@@ -13,7 +13,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.terraformers.smolder.Smolder"
+      "com.terraformersmc.smolder.Smolder"
     ]
   },
   "mixins": [

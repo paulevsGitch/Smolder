@@ -1,9 +1,9 @@
-package com.terraformers.smolder.world;
+package com.terraformersmc.smolder.world;
 
 import java.util.Collections;
 
 import com.mojang.serialization.Codec;
-import com.terraformers.smolder.generator.BiomeMap;
+import com.terraformersmc.smolder.generator.BiomeMap;
 
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;

@@ -1,4 +1,4 @@
-package com.terraformers.smolder.noise;
+package com.terraformersmc.smolder.noise;
 
 /*
  * OpenSimplex Noise in Java.

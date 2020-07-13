@@ -1,4 +1,4 @@
-package com.terraformers.smolder.config;
+package com.terraformersmc.smolder.config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.terraformers.smolder.Smolder;
+import com.terraformersmc.smolder.Smolder;
 
 public class Config
 {

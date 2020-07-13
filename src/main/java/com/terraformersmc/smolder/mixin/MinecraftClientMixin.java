@@ -1,11 +1,11 @@
-package com.terraformers.smolder.mixin;
+package com.terraformersmc.smolder.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.terraformers.smolder.config.Config;
+import com.terraformersmc.smolder.config.Config;
 
 import net.minecraft.client.MinecraftClient;
 
