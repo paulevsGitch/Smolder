@@ -16,7 +16,6 @@ import com.terraformers.smolder.config.Config;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.biome.Biomes;
 
 public final class SmolderBiomeRegistry
@@ -218,17 +217,6 @@ public final class SmolderBiomeRegistry
 	public static boolean isSameBiome(SmolderBiome source, SmolderBiome compare)
 	{
 		return compare == source || hasBiomeAsParent(compare, source);
-	}
-	
-	/**
-	 * Register existing biomes on library startup. Must be called once.
-	 */
-	public static void registerExistingBiomes()
-	{
-		Registry.BIOME.forEach((biome) -> {
-			if (biome.getCategory() == Category.NETHER && !(biome instanceof SmolderBiome))
-				registerBiome(biome);
-		});
 	}
 	
 	public static void register() {}
