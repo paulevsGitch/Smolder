@@ -1,34 +1,44 @@
 package com.terraformers.smolder.world;
 
+import java.util.Collections;
+
 import com.mojang.serialization.Codec;
+import com.terraformers.smolder.generator.BiomeMap;
 
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeLayerSampler;
 import net.minecraft.world.biome.source.BiomeSource;
 
-public class SmolderBiomeSource extends BiomeSource {
-	public static Codec<SmolderBiomeSource> CODEC = Codec.LONG.fieldOf("seed").xmap(SmolderBiomeSource::new, (source) -> source.seed).stable().codec();
+public class SmolderBiomeSource extends BiomeSource
+{
+	public static final Codec<SmolderBiomeSource> CODEC = Codec.LONG.fieldOf("seed").xmap(SmolderBiomeSource::new, (source) -> source.seed).stable().codec();
+	private BiomeMap map;
 	private final long seed;
-	private final BiomeLayerSampler sampler;
 
-	public SmolderBiomeSource(long seed) {
-		super(SmolderBiomeData.biomePicker.getBiomes());
+	public SmolderBiomeSource(long seed)
+	{
+		super(Collections.emptyList());
 		this.seed = seed;
-		sampler = SmolderBiomeLayers.build(seed);
+		this.map = new BiomeMap(seed);
 	}
 
 	@Override
-	protected Codec<? extends BiomeSource> method_28442() {
-		return CODEC;
+	public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ)
+	{
+		Biome biome = map.getBiome(biomeX << 2, biomeZ << 2).getBiome();
+		if (biomeX == 0 && biomeZ == 0)
+			map.clearCache();
+		return biome;
 	}
-
+	
 	@Override
-	public BiomeSource withSeed(long seed) {
+	public BiomeSource withSeed(long seed)
+	{
 		return new SmolderBiomeSource(seed);
 	}
 
 	@Override
-	public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-		return sampler.sample(biomeX, biomeZ);
+	protected Codec<? extends BiomeSource> method_28442()
+	{
+		return CODEC;
 	}
 }

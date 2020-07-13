@@ -25,3 +25,5 @@ bin/
 run/
 
 .DS_Store
+
+*.launch
