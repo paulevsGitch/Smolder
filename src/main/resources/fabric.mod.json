@@ -8,7 +8,7 @@
     "TerraformersMC",
     "paulevs"
   ],
-  "license": "CC0-1.0",
+  "license": "LGPLv3",
   "icon": "assets/smolder/icon.png",
   "environment": "*",
   "entrypoints": {
