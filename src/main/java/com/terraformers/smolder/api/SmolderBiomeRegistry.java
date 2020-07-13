@@ -152,17 +152,6 @@ public final class SmolderBiomeRegistry
 	}
 	
 	/**
-	 * Registers biome from another mod, used in callback.
-	 * @param i - raw ID;
-	 * @param id - {@link Identifier} of biome;
-	 * @param biome - {@link Biome} itself.
-	 */
-	public static void registerModBiome(int i, Identifier id, Biome biome)
-	{
-		registerBiome(biome);
-	}
-	
-	/**
 	 * Returns random {@link SmolderBiome}.
 	 * @param random - {@link Random};
 	 * @return weighted {@link SmolderBiome}.

@@ -19,7 +19,7 @@ public class Smolder implements ModInitializer
 	{
 		SmolderBiomeRegistry.register();
 		Registry.register(Registry.BIOME_SOURCE, new Identifier(MOD_ID, "smolder_biome_source"), SmolderBiomeSource.CODEC);
-		RegistryEntryAddedCallback.event(Registry.BIOME).register(SmolderBiomeRegistry::registerModBiome);
+		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, id, biome) -> { SmolderBiomeRegistry.registerBiome(biome); });
 		registerExistingBiomes();
 	}
 	
