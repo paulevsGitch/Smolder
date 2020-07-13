@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.terraformers.smolder.biome.SmolderBiome;
-import com.terraformers.smolder.biome.SmolderWrappedBiome;
+import com.terraformers.smolder.biome.SmolderBiomeSettings;
 import com.terraformers.smolder.config.Config;
 
 import net.minecraft.util.Identifier;
@@ -225,5 +225,22 @@ public final class SmolderBiomeRegistry
 			par = SmolderBiomeRegistry.getParent(par);
 		}
 		return false;
+	}
+	
+	private static final class SmolderWrappedBiome extends SmolderBiome
+	{
+		private final Biome biome;
+		
+		public SmolderWrappedBiome(Biome biome)
+		{
+			super(Registry.BIOME.getId(biome), new SmolderBiomeSettings(biome));
+			this.biome = biome;
+		}
+		
+		@Override
+		public Biome getBiome()
+		{
+			return biome;
+		}
 	}
 }
