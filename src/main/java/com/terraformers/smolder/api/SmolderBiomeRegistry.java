@@ -208,7 +208,7 @@ public final class SmolderBiomeRegistry
 		return compare == source || hasBiomeAsParent(compare, source);
 	}
 	
-	public static void register() {}
+	public static void init() {}
 	
 	public static boolean hasSubBiomes(SmolderBiome biome)
 	{

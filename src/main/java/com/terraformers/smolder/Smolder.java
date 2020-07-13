@@ -17,7 +17,7 @@ public class Smolder implements ModInitializer
 	@Override
 	public void onInitialize()
 	{
-		SmolderBiomeRegistry.register();
+		SmolderBiomeRegistry.init();
 		Registry.register(Registry.BIOME_SOURCE, new Identifier(MOD_ID, "smolder_biome_source"), SmolderBiomeSource.CODEC);
 		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, id, biome) -> { SmolderBiomeRegistry.registerBiome(biome); });
 		registerExistingBiomes();

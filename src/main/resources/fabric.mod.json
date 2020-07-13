@@ -3,9 +3,10 @@
   "id": "smolder",
   "version": "${version}",
   "name": "Smolder",
-  "description": "Makes Nether Generation more mod compatible.",
+  "description": "Makes Nether Generation more mod compatible and improves biome generation.",
   "authors": [
-    "TerraformersMC"
+    "TerraformersMC",
+    "paulevs"
   ],
   "license": "CC0-1.0",
   "icon": "assets/smolder/icon.png",
