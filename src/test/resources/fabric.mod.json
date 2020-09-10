@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "smoldertest",
+  "version": "${version}",
+  "name": "Smolder Test",
+  "description": "For testing smolder lib",
+  "authors": [
+    "TerraformersMC",
+    "paulevs"
+  ],
+  "license": "LGPLv3",
+  "icon": "assets/smolder/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.terraformersmc.smoldertest.BiomeTesting"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "smolder": "*",
+	"fabricloader": ">=0.9.3+build.207",
+    "minecraft": ">=1.16.2"
+  }
+}
