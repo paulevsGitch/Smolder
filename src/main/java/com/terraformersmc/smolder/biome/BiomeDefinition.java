@@ -57,7 +57,6 @@ public class BiomeDefinition {
 	private int waterColor = 4159204;
 	private int fogColor = 3344392;
 	
-	private boolean defaultMushrooms = true;
 	private boolean defaultOres = true;
 	private boolean defaultMobs = true;
 	private boolean defaultFeatures = true;
@@ -72,16 +71,6 @@ public class BiomeDefinition {
 	 */
 	public BiomeDefinition setSurfaceBuilder(ConfiguredSurfaceBuilder<?> surfaceBuilder) {
 		this.surfaceBuilder = surfaceBuilder;
-		return this;
-	}
-	
-	/**
-	 * Set default mushrooms generation
-	 * @param value - if true (default) then mushrooms will be generated
-	 * @return this {@link BiomeDefinition}
-	 */
-	public BiomeDefinition addDefaultMushrooms(boolean value) {
-		defaultMushrooms = value;
 		return this;
 	}
 	
@@ -305,7 +294,6 @@ public class BiomeDefinition {
 		generationSettings.surfaceBuilder(surfaceBuilder);
 		structures.forEach((structure) -> generationSettings.structureFeature(structure));
 		features.forEach((info) -> generationSettings.feature(info.featureStep, info.feature));
-		if (defaultMushrooms) DefaultBiomeFeatures.addDefaultMushrooms(generationSettings);
 		if (defaultOres) DefaultBiomeFeatures.addNetherMineables(generationSettings);
 		if (defaultStructureFeatures) addDefaultStructures(generationSettings);
 		if (defaultFeatures) addDefaultFeatures(generationSettings);
