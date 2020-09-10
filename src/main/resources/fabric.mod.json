@@ -20,7 +20,7 @@
     "smolder.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.8+build.202",
-    "minecraft": ">=1.16-"
+    "fabricloader": ">=0.9.3+build.207",
+    "minecraft": ">=1.16.2"
   }
 }

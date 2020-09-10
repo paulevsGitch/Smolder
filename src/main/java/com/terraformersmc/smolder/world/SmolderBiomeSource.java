@@ -26,6 +26,7 @@ public class SmolderBiomeSource extends BiomeSource {
 		if (biomeX == 0 && biomeZ == 0) {
 			map.clearCache();
 		}
+		System.out.println(biome);
 		return biome;
 	}
 	
@@ -35,7 +36,7 @@ public class SmolderBiomeSource extends BiomeSource {
 	}
 
 	@Override
-	protected Codec<? extends BiomeSource> method_28442() {
+	protected Codec<? extends BiomeSource> getCodec() {
 		return CODEC;
 	}
 }
