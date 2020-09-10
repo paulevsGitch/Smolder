@@ -1,7 +1,6 @@
 package com.terraformersmc.smolder;
 
 import com.terraformersmc.smolder.api.SmolderBiomeRegistry;
-import com.terraformersmc.smolder.biome.BiomeDefinition;
 import com.terraformersmc.smolder.world.SmolderBiomeSource;
 
 import net.fabricmc.api.ModInitializer;
@@ -22,8 +21,6 @@ public class Smolder implements ModInitializer {
 			if (biome.getCategory() == Category.NETHER && (id != null && !SmolderBiomeRegistry.lastID.equals(id))) SmolderBiomeRegistry.registerBiome(biome);
 		});
 		registerExistingBiomes();
-		
-		SmolderBiomeRegistry.registerBiome(new Identifier("smolder", "test_biome"), new BiomeDefinition().setFogColor(0, 255, 0));
 	}
 	
 	/**

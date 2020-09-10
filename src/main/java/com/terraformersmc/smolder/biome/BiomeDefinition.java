@@ -80,8 +80,7 @@ public class BiomeDefinition {
 	 * @param value - if true (default) then mushrooms will be generated
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition addDefaultMushrooms(boolean value)
-	{
+	public BiomeDefinition addDefaultMushrooms(boolean value) {
 		defaultMushrooms = value;
 		return this;
 	}
@@ -91,8 +90,7 @@ public class BiomeDefinition {
 	 * @param value - if true (default) then default ores will be generated
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition addDefaultOres(boolean value)
-	{
+	public BiomeDefinition addDefaultOres(boolean value) {
 		defaultOres = value;
 		return this;
 	}
@@ -102,8 +100,7 @@ public class BiomeDefinition {
 	 * @param value - if true (default) then default structure features (nether fortresses, caves, etc.) will be added into biome
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition addDefaultStructureFeatures(boolean value)
-	{
+	public BiomeDefinition addDefaultStructureFeatures(boolean value) {
 		defaultStructureFeatures = value;
 		return this;
 	}
@@ -113,8 +110,7 @@ public class BiomeDefinition {
 	 * @param value - if true (default) then default features (small structures) will be added into biome
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition addDefaultFeatures(boolean value)
-	{
+	public BiomeDefinition addDefaultFeatures(boolean value) {
 		defaultFeatures = value;
 		return this;
 	}
@@ -124,8 +120,7 @@ public class BiomeDefinition {
 	 * @param value - if true (default) then default mobs will be added into biome
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition addDefaultMobs(boolean value)
-	{
+	public BiomeDefinition addDefaultMobs(boolean value) {
 		defaultMobs = value;
 		return this;
 	}
@@ -335,17 +330,15 @@ public class BiomeDefinition {
 				.build();
 	}
 	
-	private void addDefaultStructures(GenerationSettings.Builder generationSettings)
-	{
+	private void addDefaultStructures(GenerationSettings.Builder generationSettings) {
 		generationSettings.structureFeature(ConfiguredStructureFeatures.RUINED_PORTAL_NETHER);
 		generationSettings.structureFeature(ConfiguredStructureFeatures.FORTRESS);
 		generationSettings.structureFeature(ConfiguredStructureFeatures.BASTION_REMNANT);
 		generationSettings.carver(GenerationStep.Carver.AIR, ConfiguredCarvers.NETHER_CAVE);
 		generationSettings.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.SPRING_LAVA);
 	}
-	
-	private void addDefaultFeatures(GenerationSettings.Builder generationSettings)
-	{
+
+	private void addDefaultFeatures(GenerationSettings.Builder generationSettings) {
 		generationSettings.feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ConfiguredFeatures.SPRING_OPEN);
 		generationSettings.feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ConfiguredFeatures.PATCH_FIRE);
 		generationSettings.feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ConfiguredFeatures.PATCH_SOUL_FIRE);
@@ -356,9 +349,8 @@ public class BiomeDefinition {
 		generationSettings.feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ConfiguredFeatures.ORE_MAGMA);
 		generationSettings.feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ConfiguredFeatures.SPRING_CLOSED);
 	}
-	
-	private void addDefaultMobs(SpawnSettings.Builder spawnSettings)
-	{
+
+	private void addDefaultMobs(SpawnSettings.Builder spawnSettings) {
 		spawnSettings.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntityType.GHAST, 50, 4, 4));
 		spawnSettings.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntityType.ZOMBIFIED_PIGLIN, 100, 4, 4));
 		spawnSettings.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntityType.MAGMA_CUBE, 2, 4, 4));

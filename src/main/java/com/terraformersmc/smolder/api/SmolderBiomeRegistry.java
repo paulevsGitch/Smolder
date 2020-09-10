@@ -212,8 +212,7 @@ public final class SmolderBiomeRegistry {
 	 * @param biome
 	 * @return
 	 */
-	public static SmolderBiome getFromBiome(Biome biome)
-	{
+	public static SmolderBiome getFromBiome(Biome biome) {
 		Optional<RegistryKey<Biome>> optional = BuiltinRegistries.BIOME.getKey(biome);
 		return optional.isPresent() ? LINKS.get(optional.get()) : null;
 	}
