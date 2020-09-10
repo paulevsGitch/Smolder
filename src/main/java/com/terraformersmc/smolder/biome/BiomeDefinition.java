@@ -30,7 +30,7 @@ import net.minecraft.world.gen.feature.DefaultBiomeFeatures;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders;
 
-public class BiomeDefenition {
+public class BiomeDefinition {
 	private static final int ALPHA = 255 << 24;
 	
 	private List<ConfiguredStructureFeature<?, ?>> structures = Lists.newArrayList();
@@ -63,14 +63,14 @@ public class BiomeDefenition {
 	private boolean defaultFeatures = true;
 	private boolean defaultStructureFeatures = true;
 	
-	public BiomeDefenition() {}
+	public BiomeDefinition() {}
 	
 	/**
 	 * Set biome surface builder
 	 * @param surfaceBuilder - {@link ConfiguredSurfaceBuilder}
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition setSurfaceBuilder(ConfiguredSurfaceBuilder<?> surfaceBuilder) {
+	public BiomeDefinition setSurfaceBuilder(ConfiguredSurfaceBuilder<?> surfaceBuilder) {
 		this.surfaceBuilder = surfaceBuilder;
 		return this;
 	}
@@ -78,9 +78,9 @@ public class BiomeDefenition {
 	/**
 	 * Set default mushrooms generation
 	 * @param value - if true (default) then mushrooms will be generated
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addDefaultMushrooms(boolean value)
+	public BiomeDefinition addDefaultMushrooms(boolean value)
 	{
 		defaultMushrooms = value;
 		return this;
@@ -89,9 +89,9 @@ public class BiomeDefenition {
 	/**
 	 * Set default ores generation
 	 * @param value - if true (default) then default ores will be generated
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addDefaultOres(boolean value)
+	public BiomeDefinition addDefaultOres(boolean value)
 	{
 		defaultOres = value;
 		return this;
@@ -100,9 +100,9 @@ public class BiomeDefenition {
 	/**
 	 * Set default nether structure features to be added
 	 * @param value - if true (default) then default structure features (nether fortresses, caves, etc.) will be added into biome
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addDefaultStructureFeatures(boolean value)
+	public BiomeDefinition addDefaultStructureFeatures(boolean value)
 	{
 		defaultStructureFeatures = value;
 		return this;
@@ -111,9 +111,9 @@ public class BiomeDefenition {
 	/**
 	 * Set default nether features to be added
 	 * @param value - if true (default) then default features (small structures) will be added into biome
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addDefaultFeatures(boolean value)
+	public BiomeDefinition addDefaultFeatures(boolean value)
 	{
 		defaultFeatures = value;
 		return this;
@@ -122,9 +122,9 @@ public class BiomeDefenition {
 	/**
 	 * Set default Nether Wastes mobs to be added
 	 * @param value - if true (default) then default mobs will be added into biome
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addDefaultMobs(boolean value)
+	public BiomeDefinition addDefaultMobs(boolean value)
 	{
 		defaultMobs = value;
 		return this;
@@ -137,9 +137,9 @@ public class BiomeDefenition {
 	 * @param weight - cumulative spawning weight
 	 * @param minGroupSize - minimum count of mobs in the group
 	 * @param maxGroupSize - maximum count of mobs in the group
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addMobSpawn(EntityType<?> type, SpawnGroup group, int weight, int minGroupSize, int maxGroupSize) {
+	public BiomeDefinition addMobSpawn(EntityType<?> type, SpawnGroup group, int weight, int minGroupSize, int maxGroupSize) {
 		SpawnInfo info = new SpawnInfo();
 		info.type = type;
 		info.group = group;
@@ -153,14 +153,14 @@ public class BiomeDefenition {
 	/**
 	 * Adds feature (small structure) into biome - plants, ores, small buildings, etc.
 	 * @param feature - {@link ConfiguredStructureFeature} to add
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition addStructureFeature(ConfiguredStructureFeature<?, ?> feature) {
+	public BiomeDefinition addStructureFeature(ConfiguredStructureFeature<?, ?> feature) {
 		structures.add(feature);
 		return this;
 	}
 	
-	public BiomeDefenition addFeature(Feature featureStep, ConfiguredFeature<?, ?> feature) {
+	public BiomeDefinition addFeature(Feature featureStep, ConfiguredFeature<?, ?> feature) {
 		FeatureInfo info = new FeatureInfo();
 		info.featureStep = featureStep;
 		info.feature = feature;
@@ -173,9 +173,9 @@ public class BiomeDefenition {
 	 * @param r - Red [0 - 255]
 	 * @param g - Green [0 - 255]
 	 * @param b - Blue [0 - 255]
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition setFogColor(int r, int g, int b) {
+	public BiomeDefinition setFogColor(int r, int g, int b) {
 		r = MathHelper.clamp(r, 0, 255);
 		g = MathHelper.clamp(g, 0, 255);
 		b = MathHelper.clamp(b, 0, 255);
@@ -188,9 +188,9 @@ public class BiomeDefenition {
 	 * @param r - Red [0 - 255]
 	 * @param g - Green [0 - 255]
 	 * @param b - Blue [0 - 255]
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition setWaterColor(int r, int g, int b) {
+	public BiomeDefinition setWaterColor(int r, int g, int b) {
 		r = MathHelper.clamp(r, 0, 255);
 		g = MathHelper.clamp(g, 0, 255);
 		b = MathHelper.clamp(b, 0, 255);
@@ -203,9 +203,9 @@ public class BiomeDefenition {
 	 * @param r - Red [0 - 255]
 	 * @param g - Green [0 - 255]
 	 * @param b - Blue [0 - 255]
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition setWaterFogColor(int r, int g, int b) {
+	public BiomeDefinition setWaterFogColor(int r, int g, int b) {
 		r = MathHelper.clamp(r, 0, 255);
 		g = MathHelper.clamp(g, 0, 255);
 		b = MathHelper.clamp(b, 0, 255);
@@ -223,9 +223,9 @@ public class BiomeDefenition {
 	/**
 	 * Plays in never-ending loop for as long as player is in the biome
 	 * @param loop - SoundEvent
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition setLoop(SoundEvent loop) {
+	public BiomeDefinition setLoop(SoundEvent loop) {
 		this.loop = loop;
 		return this;
 	}
@@ -233,9 +233,9 @@ public class BiomeDefenition {
 	/**
 	 * Plays commonly while the player is in the biome
 	 * @param mood - SoundEvent
-	 * @return this {@link BiomeDefenition}
+	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefenition setMood(SoundEvent mood) {
+	public BiomeDefinition setMood(SoundEvent mood) {
 		this.mood = new BiomeMoodSound(mood, 6000, 8, 2.0D);
 		return this;
 	}
@@ -245,7 +245,7 @@ public class BiomeDefenition {
 	 * @param additions - SoundEvent
 	 * @return this BiomeDefenition
 	 */
-	public BiomeDefenition setAdditions(SoundEvent additions) {
+	public BiomeDefinition setAdditions(SoundEvent additions) {
 		this.additions = new BiomeAdditionsSound(additions, 0.0111);
 		return this;
 	}
@@ -255,37 +255,37 @@ public class BiomeDefenition {
 	 * @param music
 	 * @return
 	 */
-	public BiomeDefenition setMusic(SoundEvent music) {
+	public BiomeDefinition setMusic(SoundEvent music) {
 		this.music = music;
 		return this;
 	}
 
-	public BiomeDefenition setPrecipitation(Precipitation precipitation) {
+	public BiomeDefinition setPrecipitation(Precipitation precipitation) {
 		this.precipitation = precipitation;
 		return this;
 	}
 	
-	public BiomeDefenition setTemperature(float temperature) {
+	public BiomeDefinition setTemperature(float temperature) {
 		this.temperature = temperature;
 		return this;
 	}
 	
-	public BiomeDefenition setDownfall(float downfall) {
+	public BiomeDefinition setDownfall(float downfall) {
 		this.downfall = downfall;
 		return this;
 	}
 	
-	public BiomeDefenition setCategory(Category category) {
+	public BiomeDefinition setCategory(Category category) {
 		this.category = category;
 		return this;
 	}
 	
-	public BiomeDefenition setSize(float size) {
+	public BiomeDefinition setSize(float size) {
 		this.size = size;
 		return this;
 	}
 	
-	public BiomeDefenition setWeight(float weight) {
+	public BiomeDefinition setWeight(float weight) {
 		this.weight = weight;
 		return this;
 	}

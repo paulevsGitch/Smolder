@@ -1,7 +1,6 @@
 package com.terraformersmc.smolder.world;
 
 import java.util.Collections;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.terraformersmc.smolder.api.SmolderBiomeRegistry;
@@ -21,7 +20,7 @@ public class SmolderBiomeSource extends BiomeSource {
 		}), Codec.LONG.fieldOf("seed").stable().forGetter((theEndBiomeSource) -> {
 			return theEndBiomeSource.seed;
 		})).apply(instance, instance.stable(SmolderBiomeSource::new));
-	});// Codec.LONG.fieldOf("seed").xmap(SmolderBiomeSource::new, (source) -> source.seed).stable().codec();
+	});
 	private BiomeMap map;
 	private final long seed;
 	private final Registry<Biome> biomeRegistry;
@@ -40,7 +39,6 @@ public class SmolderBiomeSource extends BiomeSource {
 			map.clearCache();
 		}
 		return biomeRegistry.getOrThrow(SmolderBiomeRegistry.getBiomeKey(biome));
-		//return biome;
 	}
 	
 	@Override

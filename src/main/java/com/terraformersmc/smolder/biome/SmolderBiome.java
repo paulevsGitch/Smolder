@@ -12,14 +12,16 @@ public class SmolderBiome {
 	private float weight;
 	private final int id;
 	private final Biome biome;
+	private Identifier mcID;
 	
-	public SmolderBiome(Identifier id, BiomeDefenition settings) {
+	public SmolderBiome(Identifier id, BiomeDefinition def) {
 		String group = String.format("biome.%s.%s", id.getNamespace(), id.getPath());
 		
 		this.id = globalID++;
-		this.size = Config.getFloat(group, "size", settings.getSize());
-		this.weight = Config.getFloat(group, "weight", settings.getWeight());
-		this.biome = settings.build();
+		this.size = Config.getFloat(group, "size", def.getSize());
+		this.weight = Config.getFloat(group, "weight", def.getWeight());
+		this.biome = def.build();
+		this.mcID = id;
 	}
 	
 	public Biome getBiome() {
@@ -48,5 +50,9 @@ public class SmolderBiome {
 	public boolean equals(Object obj) {
 		SmolderBiome biome = (SmolderBiome) obj;
 		return biome == null ? false : biome.id == id;
+	}
+
+	public Identifier getID() {
+		return mcID;
 	}
 }

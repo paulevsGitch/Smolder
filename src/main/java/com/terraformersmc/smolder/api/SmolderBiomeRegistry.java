@@ -10,7 +10,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.terraformersmc.smolder.biome.BiomeDefenition;
+import com.terraformersmc.smolder.biome.BiomeDefinition;
 import com.terraformersmc.smolder.biome.SmolderBiome;
 import com.terraformersmc.smolder.config.Config;
 
@@ -37,6 +37,7 @@ public final class SmolderBiomeRegistry {
 	public static final SmolderBiome WARPED_FOREST_BIOME = registerBiome(new Identifier("warped_forest"));
 	public static final SmolderBiome SOUL_SAND_VALLEY_BIOME = registerBiome(new Identifier("soul_sand_valley"));
 	public static final SmolderBiome BASALT_DELTAS_BIOME = registerBiome(new Identifier("basalt_deltas"));
+	public static Identifier lastID = new Identifier("");
 	
 	/**
 	 * Used to put non-smolder biomes to registry. Puts them into wrappers with default values;
@@ -44,7 +45,7 @@ public final class SmolderBiomeRegistry {
 	 */
 	public static SmolderBiome registerBiome(Identifier biomeID) {
 		Biome biome = BuiltinRegistries.BIOME.get(biomeID);
-		return registerBiome(biomeID, new SmolderWrappedBiome(biome));
+		return registerBiome(new SmolderWrappedBiome(biome));
 	}
 	
 	/**
@@ -52,17 +53,21 @@ public final class SmolderBiomeRegistry {
 	 * @param biome - a {@link Biome} to register.
 	 */
 	public static SmolderBiome registerBiome(Biome biome) {
-		Identifier id = BuiltinRegistries.BIOME.getId(biome);
-		return registerBiome(id, new SmolderWrappedBiome(biome));
+		return registerBiome(new SmolderWrappedBiome(biome));
+	}
+	
+	public static SmolderBiome registerBiome(Identifier id, BiomeDefinition def) {
+		return registerBiome(new SmolderBiome(id, def));
 	}
 
 	/**
 	 * Put biome into registry.
 	 * @param biome - a {@link SmolderBiome} to register.
 	 */
-	public static SmolderBiome registerBiome(Identifier id, SmolderBiome biome) {
+	public static SmolderBiome registerBiome(SmolderBiome biome) {
+		lastID = biome.getID();
 		if (biome.getWeight() > 0) {
-			register(id, biome);
+			register(biome);
 			if (OVERRIDE || !BIOMES.contains(biome)) {
 				BIOMES.add(biome);
 				weight = biome.addWeight(weight);
@@ -77,8 +82,8 @@ public final class SmolderBiomeRegistry {
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
 	 * @return edge {@link SmolderBiome}.
 	 */
-	public static SmolderBiome registerEdgeBiome(Identifier id, SmolderBiome edge, SmolderBiome parent) {
-		register(id, edge);
+	public static SmolderBiome registerEdgeBiome(SmolderBiome edge, SmolderBiome parent) {
+		register(edge);
 		if (OVERRIDE || !EDGES.containsKey(parent)) {
 			EDGES.put(parent, edge);
 			PARENTS.put(edge, parent);
@@ -92,9 +97,9 @@ public final class SmolderBiomeRegistry {
 	 * @param parent - a {@link SmolderBiome} that is parent of it.
 	 * @return {@link SmolderBiome} sub-biome.
 	 */
-	public static SmolderBiome registerSubBiome(Identifier id, SmolderBiome subbiome, SmolderBiome parent) {
+	public static SmolderBiome registerSubBiome(SmolderBiome subbiome, SmolderBiome parent) {
 		if (subbiome.getWeight() > 0) {
-			register(id, subbiome);
+			register(subbiome);
 			List<SmolderBiome> subbiomes = SUBBIOMES.get(parent);
 			if (subbiomes == null) {
 				subbiomes = new ArrayList<SmolderBiome>();
@@ -145,11 +150,12 @@ public final class SmolderBiomeRegistry {
 		return SUBBIOMES.get(biome);
 	}
 	
-	private static void register(Identifier id, SmolderBiome biome) {
+	private static void register(SmolderBiome biome) {
 		if (!(biome instanceof SmolderWrappedBiome)) {
-			Registry.register(BuiltinRegistries.BIOME, id, biome.getBiome());
+			Registry.register(BuiltinRegistries.BIOME, biome.getID(), biome.getBiome());
 		}
-		RegistryKey<Biome> key = RegistryKey.of(Registry.BIOME_KEY, id);
+		Optional<RegistryKey<Biome>> optional = BuiltinRegistries.BIOME.getKey(biome.getBiome());
+		RegistryKey<Biome> key = optional.isPresent() ? optional.get() : RegistryKey.of(Registry.BIOME_KEY, biome.getID());
 		LINKS.put(key, biome);
 		KEYS.put(biome, key);
 	}
@@ -247,7 +253,7 @@ public final class SmolderBiomeRegistry {
 		private final Biome biome;
 		
 		public SmolderWrappedBiome(Biome biome) {
-			super(BuiltinRegistries.BIOME.getId(biome), new BiomeDefenition());
+			super(BuiltinRegistries.BIOME.getId(biome), new BiomeDefinition());
 			this.biome = biome;
 		}
 		
