@@ -220,7 +220,7 @@ public class BiomeDefinition {
 	 * @param loop - SoundEvent
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition setLoop(SoundEvent loop) {
+	public BiomeDefinition setLoopSound(SoundEvent loop) {
 		this.loop = loop;
 		return this;
 	}
@@ -230,7 +230,7 @@ public class BiomeDefinition {
 	 * @param mood - SoundEvent
 	 * @return this {@link BiomeDefinition}
 	 */
-	public BiomeDefinition setMood(SoundEvent mood) {
+	public BiomeDefinition setMoodSound(SoundEvent mood) {
 		this.mood = new BiomeMoodSound(mood, 6000, 8, 2.0D);
 		return this;
 	}
@@ -240,7 +240,7 @@ public class BiomeDefinition {
 	 * @param additions - SoundEvent
 	 * @return this BiomeDefenition
 	 */
-	public BiomeDefinition setAdditions(SoundEvent additions) {
+	public BiomeDefinition setAdditionsSounds(SoundEvent additions) {
 		this.additions = new BiomeAdditionsSound(additions, 0.0111);
 		return this;
 	}
