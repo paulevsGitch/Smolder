@@ -22,6 +22,7 @@ import net.minecraft.world.biome.Biome;
 
 public final class SmolderBiomeRegistry {
 	private static final Map<RegistryKey<Biome>, SmolderBiome> LINKS = Maps.newHashMap();
+	private static final Map<SmolderBiome, RegistryKey<Biome>> KEYS = Maps.newHashMap();
 	private static final Set<SmolderBiome> BIOMES = Sets.newHashSet();
 	private static final Map<SmolderBiome, SmolderBiome> EDGES = Maps.newHashMap();
 	private static final Map<SmolderBiome, List<SmolderBiome>> SUBBIOMES = Maps.newHashMap();
@@ -150,6 +151,7 @@ public final class SmolderBiomeRegistry {
 		}
 		RegistryKey<Biome> key = RegistryKey.of(Registry.BIOME_KEY, id);
 		LINKS.put(key, biome);
+		KEYS.put(biome, key);
 	}
 	
 	/**
@@ -224,6 +226,10 @@ public final class SmolderBiomeRegistry {
 	
 	public static boolean hasSubBiomes(SmolderBiome biome) {
 		return SUBBIOMES.get(biome) != null;
+	}
+	
+	public static RegistryKey<Biome> getBiomeKey(SmolderBiome biome) {
+		return KEYS.get(biome);
 	}
 	
 	public static boolean hasBiomeAsParent(SmolderBiome biome, SmolderBiome parent) {

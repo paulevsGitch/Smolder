@@ -20,7 +20,7 @@ public class MixinDimensionType {
 	 */
 	@Overwrite
 	private static ChunkGenerator createNetherGenerator(Registry<Biome> biomeRegistry, Registry<ChunkGeneratorSettings> chunkGeneratorSettingsRegistry, long seed) {
-		return new NoiseChunkGenerator(new SmolderBiomeSource(seed), seed, () -> {
+		return new NoiseChunkGenerator(new SmolderBiomeSource(biomeRegistry, seed), seed, () -> {
 			return (ChunkGeneratorSettings) chunkGeneratorSettingsRegistry.getOrThrow(ChunkGeneratorSettings.NETHER);
 		});
 	}
